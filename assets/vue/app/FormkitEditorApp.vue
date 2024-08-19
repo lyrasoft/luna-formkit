@@ -7,7 +7,7 @@ import { computed, nextTick, onMounted, provide, ref } from 'vue';
 const props = defineProps<{
   fields: any[];
   types: Record<string, FormType>;
-  item: Formkit;
+  item?: Formkit;
   name: string;
 }>();
 

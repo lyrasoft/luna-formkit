@@ -39,7 +39,7 @@ function remove(i: number) {
     <div class="c-field-options">
       <draggable v-model="item.options"
         handle=".h-option-handle"
-        :animatio="150"
+        :animation="150"
         :group="`field-${item.uid}-group`">
         <TransitionGroup name="fade">
           <div class="c-field-option d-flex align-items-center gap-2 mb-2"
@@ -55,6 +55,9 @@ function remove(i: number) {
             </div>
             <div class="flex-grow-1">
               <input type="text" class="form-control form-control-sm" v-model="option.text" />
+            </div>
+            <div>
+
             </div>
             <div>
               <button type="button" class="btn btn-sm btn-link"
