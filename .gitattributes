@@ -1,0 +1,8 @@
+/assets/src export-ignore
+/assets/vue export-ignore
+/asseets/package.json export-ignore
+/.gitattributes export-ignore
+/.gitignore export-ignore
+/.github export-ignore
+/phpunit.travis.xml export-ignore
+/phpunit.xml.dist export-ignore

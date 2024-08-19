@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Config;
+namespace Lyrasoft\Formkit\Config;
 
 use Lyrasoft\Formkit\Formkit\Type\FormCheckboxes;
 use Lyrasoft\Formkit\Formkit\Type\FormDate;
