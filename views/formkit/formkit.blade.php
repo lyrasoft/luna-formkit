@@ -40,7 +40,7 @@ use function Windwalker\uid;
  * @var $formkitService FormkitService
  */
 
-$asset->js('js/formkit.js');
+$asset->js('vendor/lyrasoft/formkit/dist/formkit.js');
 
 $uid = uid();
 $formId = $options['id'] ?? 'formkit-' . $uid;

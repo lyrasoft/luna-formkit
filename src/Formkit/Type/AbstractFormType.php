@@ -107,6 +107,6 @@ abstract class AbstractFormType
 
     public static function loadVueComponent(AppContext $app, AssetService $asset): ?string
     {
-        return $asset->path('js/fields/form-' . static::getId() . '.js');
+        return $asset->path('vendor/lyrasoft/formkit/dist/fields/form-' . static::getId() . '.js');
     }
 }

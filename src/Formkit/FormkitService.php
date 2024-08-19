@@ -22,7 +22,6 @@ use Windwalker\Utilities\Cache\InstanceCacheTrait;
 
 use function Windwalker\collect;
 
-#[Service]
 class FormkitService
 {
     use InstanceCacheTrait;
@@ -67,7 +66,7 @@ class FormkitService
 
     public function getFieldLayout(AbstractFormType $field): string
     {
-        return 'types/form-' . $field::getId();
+        return 'formkit.types.form-' . $field::getId();
     }
 
     public function render(int|Formkit $item, array $options = []): string

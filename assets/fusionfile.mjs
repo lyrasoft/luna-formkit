@@ -1,10 +1,23 @@
-import fusion, { webpackVueBundle } from '@windwalker-io/fusion';
+import fusion, { webpackVueBundle, parallel, wait, babel, ts } from '@windwalker-io/fusion';
 import path from 'path';
 
-export async function main() {
+export async function js() {
+  // Watch start
+  fusion.watch('src/js/**/*.{js,mjs,ts}');
+  // Watch end
+
+  // Compile Start
+  return wait(
+    babel('src/**/*.{js,mjs}', 'dist/', { module: 'systemjs' }),
+    ts(['src/**/*.ts', 'src/**/*.d.ts'], 'dist/', { tsconfig: './tsconfig.js.json' }),
+  );
+  // Compile end
+}
+
+export async function formkitEdit() {
   return webpackVueBundle(
     'vue/entries/formkit-edit.ts',
-    'dist/js/formkit-edit/index.js',
+    'dist/formkit-edit/index.js',
     (config) => {
       config.resolve.alias = {
         '@': path.resolve(),
@@ -15,11 +28,15 @@ export async function main() {
       // Use tsconfig.vue.json if exists, default is tsconfig.json
       config.module.rules[4].options.configFile = 'tsconfig.vue.json';
       // Override if you need
+
+      config.output.chunkFilename = process.env.NODE_ENV === 'production'
+        ? 'chunks/chunk-vendor.[name].js'
+        : 'dev/page-vendor.[name].js';
     }
   );
 }
 
-export default main;
+export default parallel(js, formkitEdit);
 
 /*
  * APIs

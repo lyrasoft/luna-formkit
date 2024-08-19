@@ -42,7 +42,7 @@ $formkitService = $app->retrieve(FormkitService::class);
 $vueScript->vue();
 $vueScript->animate();
 
-$asset->js('js/formkit-edit/index.js');
+$asset->js('vendor/lyrasoft/formkit/dist/formkit-edit/index.js');
 
 $types = $formkitService->getFormTypes()
     ->map(
