@@ -53,7 +53,7 @@ $types = $formkitService->getFormTypes()
 $uniScript->data(
     'formkit.props',
     [
-        'fields' => $item->getContent(),
+        'fields' => $item?->getContent() ?: [],
         'types' => $types,
         'item' => $item,
         'name' => 'item[content]'
