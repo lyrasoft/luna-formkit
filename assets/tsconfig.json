@@ -1,6 +1,6 @@
 {
     "extends": [
-        "./tsconfig.vue.json"
+        "./tsconfig.vue.json",
     ],
     "compilerOptions": {
         "paths": {

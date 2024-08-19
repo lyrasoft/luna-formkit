@@ -16,8 +16,8 @@ export async function js() {
 
 export async function formkitEdit() {
   return webpackVueBundle(
-    'vue/entries/formkit-edit.ts',
-    'dist/formkit-edit/index.js',
+    'vue/entries/formkit-editor.ts',
+    'dist/editor/index.js',
     (config) => {
       config.resolve.alias = {
         '@': path.resolve(),
