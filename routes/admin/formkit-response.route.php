@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Routes;
 
-use App\Module\Admin\FormkitResponse\FormkitResponseController;
-use App\Module\Admin\FormkitResponse\FormkitResponseEditView;
-use App\Module\Admin\FormkitResponse\FormkitResponseListView;
+use Lyrasoft\Formkit\Module\Admin\FormkitResponse\FormkitResponseController;
+use Lyrasoft\Formkit\Module\Admin\FormkitResponse\FormkitResponseEditView;
+use Lyrasoft\Formkit\Module\Admin\FormkitResponse\FormkitResponseListView;
 use Windwalker\Core\Router\RouteCreator;
 
 /** @var  RouteCreator $router */

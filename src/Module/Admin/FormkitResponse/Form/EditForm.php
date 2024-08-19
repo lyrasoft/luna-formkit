@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Admin\FormkitResponse\Form;
+namespace Lyrasoft\Formkit\Module\Admin\FormkitResponse\Form;
 
 use Unicorn\Enum\BasicState;
 use Windwalker\Core\Language\TranslatorTrait;

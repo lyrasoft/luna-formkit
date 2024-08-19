@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Migration;
+namespace Lyrasoft\Formkit\Migration;
 
 use Lyrasoft\Formkit\Entity\Formkit;
 use Lyrasoft\Formkit\Entity\FormkitResponse;

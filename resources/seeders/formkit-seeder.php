@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Seeder;
+namespace Lyrasoft\Formkit\Seeder;
 
-use App\Entity\Formkit;
-use App\FormkitPackage;
+use Lyrasoft\Formkit\Entity\Formkit;
 use Jenssegers\Agent\Agent;
 use Lyrasoft\Formkit\Entity\FormkitResponse;
 use Lyrasoft\Formkit\Enum\ResState;
+use Lyrasoft\Formkit\FormkitPackage;
 use Lyrasoft\Luna\Entity\User;
 use Windwalker\Core\Seed\Seeder;
 use Windwalker\Database\DatabaseAdapter;

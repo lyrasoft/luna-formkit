@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Admin\FormkitResponse;
+namespace Lyrasoft\Formkit\Module\Admin\FormkitResponse;
 
-use App\Module\Admin\FormkitResponse\Form\GridForm;
+use Lyrasoft\Formkit\Module\Admin\FormkitResponse\Form\GridForm;
 use Lyrasoft\Formkit\Entity\FormkitResponse;
 use Lyrasoft\Formkit\Repository\FormkitResponseRepository;
 use Unicorn\View\FormAwareViewModelTrait;

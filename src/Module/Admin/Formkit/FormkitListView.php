@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Admin\Formkit;
+namespace Lyrasoft\Formkit\Module\Admin\Formkit;
 
 use Lyrasoft\Formkit\Module\Admin\Formkit\Form\GridForm;
 use Lyrasoft\Formkit\Entity\Formkit;

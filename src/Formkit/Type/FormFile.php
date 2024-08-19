@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Formkit\Type;
+namespace Lyrasoft\Formkit\Formkit\Type;
 
 use Psr\Http\Message\UploadedFileInterface;
 use Unicorn\Aws\S3Service;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Formkit\Exception;
+namespace Lyrasoft\Formkit\Formkit\Exception;
 
 class FormkitUnpublishedException extends \UnexpectedValueException
 {

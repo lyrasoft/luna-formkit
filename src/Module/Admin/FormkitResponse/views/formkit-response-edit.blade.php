@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\View;
+namespace Lyrasoft\Formkit\View;
 
 /**
  * Global variables
@@ -17,7 +17,7 @@ namespace App\View;
  */
 
 use Lyrasoft\Formkit\Entity\FormkitResponse;
-use App\Module\Admin\FormkitResponse\FormkitResponseEditView;
+use Lyrasoft\Formkit\Module\Admin\FormkitResponse\FormkitResponseEditView;
 use Windwalker\Core\Application\AppContext;
 use Windwalker\Core\Asset\AssetService;
 use Windwalker\Core\DateTime\ChronosService;

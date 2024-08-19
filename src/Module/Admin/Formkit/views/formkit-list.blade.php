@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\View;
+namespace Lyrasoft\Formkit\View;
 
 /**
  * Global variables
@@ -16,7 +16,7 @@ namespace App\View;
  * @var  $lang      LangService     The language translation service.
  */
 
-use App\Entity\Formkit;
+use Lyrasoft\Formkit\Entity\Formkit;
 use Unicorn\Workflow\BasicStateWorkflow;
 use Windwalker\Core\Application\AppContext;
 use Windwalker\Core\Asset\AssetService;
@@ -24,7 +24,7 @@ use Windwalker\Core\DateTime\ChronosService;
 use Windwalker\Core\Language\LangService;
 use Windwalker\Core\Router\Navigator;
 use Windwalker\Core\Router\SystemUri;
-use App\Module\Admin\Formkit\FormkitListView;
+use Lyrasoft\Formkit\Module\Admin\Formkit\FormkitListView;
 
 /**
  * @var $item Formkit

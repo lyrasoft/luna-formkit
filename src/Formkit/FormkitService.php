@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Formkit;
+namespace Lyrasoft\Formkit\Formkit;
 
-use App\Entity\Formkit;
-use App\Formkit\Exception\FormkitUnpublishedException;
-use App\Formkit\Type\AbstractFormType;
-use App\FormkitPackage;
+use Lyrasoft\Formkit\Entity\Formkit;
+use Lyrasoft\Formkit\Formkit\Exception\FormkitUnpublishedException;
+use Lyrasoft\Formkit\Formkit\Type\AbstractFormType;
+use Lyrasoft\Formkit\FormkitPackage;
 use Windwalker\Core\Application\ApplicationInterface;
 use Windwalker\Core\Form\FormFactory;
 use Windwalker\Core\Renderer\RendererService;

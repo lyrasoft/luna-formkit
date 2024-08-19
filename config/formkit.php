@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace App\Config;
 
-use App\FormkitPackage;
-use App\Formkit\Type\FormDate;
-use App\Formkit\Type\FormFile;
-use App\Formkit\Type\FormGridRadioScale;
-use App\Formkit\Type\FormPointScale;
-use App\Formkit\Type\FormSelect;
-use App\Formkit\Type\FormCheckboxes;
-use App\Formkit\Type\FormGridBoxScale;
-use App\Formkit\Type\FormRadio;
-use App\Formkit\Type\FormText;
-use App\Formkit\Type\FormTextarea;
-use App\Formkit\Type\FormTime;
+use Lyrasoft\Formkit\Formkit\Type\FormCheckboxes;
+use Lyrasoft\Formkit\Formkit\Type\FormDate;
+use Lyrasoft\Formkit\Formkit\Type\FormFile;
+use Lyrasoft\Formkit\Formkit\Type\FormGridBoxScale;
+use Lyrasoft\Formkit\Formkit\Type\FormGridRadioScale;
+use Lyrasoft\Formkit\Formkit\Type\FormPointScale;
+use Lyrasoft\Formkit\Formkit\Type\FormRadio;
+use Lyrasoft\Formkit\Formkit\Type\FormSelect;
+use Lyrasoft\Formkit\Formkit\Type\FormText;
+use Lyrasoft\Formkit\Formkit\Type\FormTextarea;
+use Lyrasoft\Formkit\Formkit\Type\FormTime;
+use Lyrasoft\Formkit\FormkitPackage;
 
 return [
     'formkit' => [

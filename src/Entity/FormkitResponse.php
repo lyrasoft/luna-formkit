@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Entity;
+namespace Lyrasoft\Formkit\Entity;
 
 use Lyrasoft\Formkit\Enum\ResState;
 use Lyrasoft\Luna\Attributes\Author;

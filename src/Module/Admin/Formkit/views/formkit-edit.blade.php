@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\View;
+namespace Lyrasoft\Formkit\View;
 
 /**
  * Global variables
@@ -17,9 +17,9 @@ namespace App\View;
  */
 
 use Lyrasoft\Formkit\Entity\Formkit;
-use App\Formkit\FormkitService;
-use App\Formkit\Type\AbstractFormType;
-use App\Module\Admin\Formkit\FormkitEditView;
+use Lyrasoft\Formkit\Formkit\FormkitService;
+use Lyrasoft\Formkit\Formkit\Type\AbstractFormType;
+use Lyrasoft\Formkit\Module\Admin\Formkit\FormkitEditView;
 use Unicorn\Script\UnicornScript;
 use Unicorn\Script\VueScript;
 use Windwalker\Core\Application\AppContext;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Formkit\Type;
+namespace Lyrasoft\Formkit\Formkit\Type;
 
 use Windwalker\Core\Application\ServiceAwareInterface;
 use Windwalker\Form\Field\AbstractField;

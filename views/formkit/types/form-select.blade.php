@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\view;
+namespace Lyrasoft\Formkit\view;
 
 /**
  * Global variables
@@ -16,10 +16,10 @@ namespace App\view;
  * @var $lang      LangService     The language translation service.
  */
 
-use App\Entity\Formkit;
-use App\Formkit\FormkitService;
-use App\Formkit\Type\AbstractFormType;
-use App\Formkit\Type\FormSelect;
+use Lyrasoft\Formkit\Entity\Formkit;
+use Lyrasoft\Formkit\Formkit\FormkitService;
+use Lyrasoft\Formkit\Formkit\Type\AbstractFormType;
+use Lyrasoft\Formkit\Formkit\Type\FormSelect;
 use Windwalker\Core\Application\AppContext;
 use Windwalker\Core\Asset\AssetService;
 use Windwalker\Core\DateTime\ChronosService;

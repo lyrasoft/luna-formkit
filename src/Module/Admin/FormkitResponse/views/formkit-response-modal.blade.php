@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\View;
+namespace Lyrasoft\Formkit\View;
 
 /**
  * Global variables
@@ -16,7 +16,7 @@ namespace App\View;
  * @var $lang      LangService     The language translation service.
  */
 
-use App\Module\Admin\FormkitResponse\FormkitResponseListView;
+use Lyrasoft\Formkit\Module\Admin\FormkitResponse\FormkitResponseListView;
 use Unicorn\Workflow\BasicStateWorkflow;
 use Windwalker\Core\Application\AppContext;
 use Windwalker\Core\Asset\AssetService;

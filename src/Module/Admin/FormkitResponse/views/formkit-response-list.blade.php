@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\View;
+namespace Lyrasoft\Formkit\View;
 
 /**
  * Global variables
@@ -24,7 +24,7 @@ use Windwalker\Core\DateTime\ChronosService;
 use Windwalker\Core\Language\LangService;
 use Windwalker\Core\Router\Navigator;
 use Windwalker\Core\Router\SystemUri;
-use App\Module\Admin\FormkitResponse\FormkitResponseListView;
+use Lyrasoft\Formkit\Module\Admin\FormkitResponse\FormkitResponseListView;
 
 /**
  * @var $item FormkitResponse
