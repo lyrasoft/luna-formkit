@@ -103,7 +103,7 @@ class FormSelect extends AbstractFormType
             ->register(
                 function (ListField $field) {
                     $field->option(
-                        $this->trans('tigcr.formset.option.select'),
+                        '- 請選擇 -',
                         ''
                     );
 

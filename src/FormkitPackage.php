@@ -8,11 +8,13 @@ use Lyrasoft\Formkit\Component\PublishingDropdownComponent;
 use Lyrasoft\Formkit\Formkit\FormkitService;
 use Windwalker\Core\Package\AbstractPackage;
 use Windwalker\Core\Package\PackageInstaller;
+use Windwalker\Core\Renderer\RendererService;
 use Windwalker\Core\Runtime\Config;
 use Windwalker\Data\Collection;
 use Windwalker\DI\Container;
 use Windwalker\DI\ServiceProviderInterface;
 use Windwalker\Utilities\Contract\LanguageInterface;
+use Windwalker\Utilities\Iterator\PriorityQueue;
 use Windwalker\Utilities\StrNormalize;
 
 class FormkitPackage extends AbstractPackage implements ServiceProviderInterface
@@ -33,12 +35,9 @@ class FormkitPackage extends AbstractPackage implements ServiceProviderInterface
             ]
         );
 
-        $container->mergeParameters(
-            'renderer.paths',
-            [
-                static::path('views'),
-            ]
-        );
+        $container->extend(RendererService::class, function (RendererService $rendererService) {
+            $rendererService->addPath(static::path('views'), PriorityQueue::BELOW_NORMAL);
+        });
     }
 
     public function config(string $path, string $delimiter = '.', int $depth = 0): mixed

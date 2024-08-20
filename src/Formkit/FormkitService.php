@@ -20,6 +20,8 @@ use Windwalker\ORM\ORM;
 use Windwalker\Renderer\CompositeRenderer;
 use Windwalker\Utilities\Cache\InstanceCacheTrait;
 
+use Windwalker\Utilities\Iterator\PriorityQueue;
+
 use function Windwalker\collect;
 
 class FormkitService
@@ -84,7 +86,7 @@ class FormkitService
 
         $id = $item->getId();
 
-        return $this->getRenderer()->render(
+        return $this->rendererService->render(
             'formkit.formkit',
             compact(
                 'id',
@@ -124,7 +126,7 @@ class FormkitService
 
                 $form->addField($fieldInstance->toFormField($this->app))
                     ->required((bool) $data->required)
-                    ->help((string) $data->description)
+                    ->set('text', (string) $data->description)
                     ->setAttribute('id', 'input-' . $data->uid)
                     ->set('uid', $data->uid);
 
@@ -197,26 +199,5 @@ class FormkitService
         if ($down !== null && $down->isPast()) {
             throw new FormkitUnpublishedException('Formkit end publish');
         }
-    }
-
-    protected function getRenderer(): CompositeRenderer
-    {
-        return $this->once(
-            'renderer',
-            function () {
-                /** @var CompositeRenderer $renderer */
-                $renderer = $this->rendererService->createRenderer();
-
-                $renderer->addPath(
-                    FormkitPackage::path('views')
-                );
-
-                $renderer->addPath(
-                    WINDWALKER_VIEWS . '/formkit'
-                );
-
-                return $renderer;
-            }
-        );
     }
 }
