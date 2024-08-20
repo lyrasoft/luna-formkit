@@ -10,3 +10,7 @@ export function prepareListItem<T = object>(item: T, defaultData: Record<string,
     ...item,
   };
 }
+
+export function deepClone<T>(item: T): T {
+  return JSON.parse(JSON.stringify(item));
+}

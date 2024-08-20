@@ -83,7 +83,7 @@ class FormText extends AbstractFormType
             [
                 'subtype' => 'text',
                 'placeholder' => '請填寫此欄位',
-                'pattern',
+                'pattern' => '',
             ]
         );
     }

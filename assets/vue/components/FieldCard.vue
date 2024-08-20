@@ -3,7 +3,7 @@ import TypeSelector from '@vue/components/TypeSelector.vue';
 import vTextareaAutoResize from '@vue/directives/v-textarea-auto-resize';
 import type { FormType, FormTypeParams } from '@vue/types';
 import { BFormCheckbox, vBTooltip } from 'bootstrap-vue-next';
-import { computed, inject, provide, watch } from 'vue';
+import { computed, inject, unref, watch } from 'vue';
 
 defineProps<{
   isFocused: boolean;
@@ -17,6 +17,10 @@ const emits = defineEmits(['focus', 'add', 'copy', 'remove']);
 const item = defineModel<FormTypeParams>({
   required: true
 });
+
+function onUpdate(v) {
+  item.value = unref(v);
+}
 
 function copy(item: any) {
   emits('copy', item);
@@ -77,7 +81,7 @@ const fieldForm = computed(() => {
       <template v-if="isFocused">
         <component v-if="startComponent" :is="startComponent" v-model="item" />
 
-        <component v-if="fieldForm" :is="fieldForm" v-model="item"></component>
+        <component v-if="fieldForm" :is="fieldForm" :model-value="item" @update:model-value="onUpdate" />
 
         <component v-if="endComponent" :is="endComponent" v-model="item" />
       </template>

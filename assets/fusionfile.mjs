@@ -3,12 +3,11 @@ import path from 'path';
 
 export async function js() {
   // Watch start
-  fusion.watch('src/js/**/*.{js,mjs,ts}');
+  fusion.watch('src/**/*.{js,mjs,ts}');
   // Watch end
 
   // Compile Start
   return wait(
-    babel('src/**/*.{js,mjs}', 'dist/', { module: 'systemjs' }),
     ts(['src/**/*.ts', 'src/**/*.d.ts'], 'dist/', { tsconfig: './tsconfig.js.json' }),
   );
   // Compile end
