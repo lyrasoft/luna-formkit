@@ -5,7 +5,7 @@
     "include": [
         "vue/**/*",
         "vue/**/*.vue",
-        "/src/**/*.ts",
+        "src/**/*.ts",
     ],
     "exclude": [
         "node_modules/**/*"

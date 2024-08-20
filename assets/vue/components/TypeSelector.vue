@@ -34,8 +34,8 @@ const groupedTypes = computed(() => {
   <BDropdown variant="light" size="lg" class=""
     toggle-class="w-100">
     <template #button-content>
-      <i class="fa-fw" :class="currentType.icon"></i>
-      {{ currentType.title }}
+      <i class="fa-fw" :class="currentType?.icon || 'far fa-circle-question'"></i>
+      {{ currentType?.title || '未知類型' }}
     </template>
 
     <template v-for="(types, group) of groupedTypes" :key="group">

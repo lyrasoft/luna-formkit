@@ -9,6 +9,10 @@ defineProps<{
   isFocused: boolean;
 }>();
 
+const startComponent = inject('field.card.start', null);
+const endComponent = inject('field.card.end', null);
+const toolbarComponent = inject('field.card.toolbar', null);
+
 const emits = defineEmits(['focus', 'add', 'copy', 'remove']);
 const item = defineModel<FormTypeParams>({
   required: true
@@ -18,9 +22,9 @@ function copy(item: any) {
   emits('copy', item);
 }
 
-async function remove(item: any, i: number) {
+async function remove(item: any) {
   if (await u.confirm('您確定要刪除嗎？')) {
-    emits('remove', item, i);
+    emits('remove', item);
   }
 }
 
@@ -36,6 +40,10 @@ watch(() => item.value.type, (type) => {
 const fieldForm = computed(() => {
   const type = types[item.value.type];
 
+  if (!type) {
+    return null;
+  }
+
   return type.componentName;
 });
 </script>
@@ -48,8 +56,8 @@ const fieldForm = computed(() => {
       <span class="far fa-ellipsis-h"></span>
     </div>
 
-    <div class="card-body">
-      <div class="row mb-2">
+    <div class="card-body d-flex flex-column gap-2">
+      <div class="row">
         <div class="col-lg-8">
           <input type="text" v-model="item.label" class="form-control form-control-lg"
             placeholder="欄位標題" />
@@ -59,26 +67,35 @@ const fieldForm = computed(() => {
         </div>
       </div>
 
-      <div v-if="isFocused" class="form-group mb-2">
+      <div v-if="isFocused" class="form-group">
       <textarea rows="1" v-model="item.description"
         class="form-control"
         v-textarea-auto-resize="{ maxHeight: 300 }"
         placeholder="描述"></textarea>
       </div>
 
-      <component v-if="isFocused" :is="fieldForm" v-model="item"></component>
+      <template v-if="isFocused">
+        <component v-if="startComponent" :is="startComponent" v-model="item" />
+
+        <component v-if="fieldForm" :is="fieldForm" v-model="item"></component>
+
+        <component v-if="endComponent" :is="endComponent" v-model="item" />
+      </template>
     </div>
 
     <div class="card-footer" v-if="isFocused">
       <div class="d-flex align-items-center gap-3">
-        <div class="me-auto">
+        <div class="">
           <button type="button" class="btn btn-outline-secondary btn-sm"
             @click.stop="$emit('add')">
             <span class="far fa-plus"></span>
             新增
           </button>
         </div>
-        <div class="">
+
+        <component v-if="toolbarComponent" :is="toolbarComponent" v-model="item" />
+
+        <div class="ms-auto">
           <BFormCheckbox v-model="item.grid_preview" name="grid-preview" switch
             v-b-tooltip="'在後台提交列表中預覽這個欄位'">
             列表預覽

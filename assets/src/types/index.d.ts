@@ -3,6 +3,8 @@ import useFormkitFieldFunc from '@vue/services/form-mixin';
 import type { Unicorn } from '@windwalker-io/unicorn';
 
 declare global {
+  // var u: Unicorn;
+
   interface Window {
     useFormkitField: typeof useFormkitFieldFunc;
   }
