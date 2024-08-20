@@ -71,7 +71,7 @@ function remove(i: number) {
 
       <!-- Other -->
       <div v-if="other && item.enable_other === '1'"
-        class="c-field-option d-flex align-items-center mb-2 gap-2">
+        class="c-field-option c-field-option--other d-flex align-items-center mb-2 gap-2">
         <div class="">
           <span class="h-option-handle far fa-fw"></span>
         </div>
