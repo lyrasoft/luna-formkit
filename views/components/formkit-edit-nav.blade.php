@@ -26,13 +26,14 @@ use Windwalker\Core\Router\Navigator;
 use Windwalker\Core\Router\SystemUri;
 
 /**
- * @var $formkit Formkit
+ * @var $formkit ?Formkit
  * @var $count int
  */
 
 $self = $nav->self();
 
 $menu = $app->service(MenuHelper::class);
+
 ?>
 <div class="card">
     <div class="card-body p-2">
@@ -43,14 +44,14 @@ $menu = $app->service(MenuHelper::class);
                 回到表單列表
             </a>
 
-            <a class="nav-item nav-link {{ $menu->active('formkit_edit') }}"
-                href="{{ $nav->to('formkit_edit')->id($formkit->getId()) }}">
+            <a class="nav-item nav-link {{ $menu->active('formkit_edit') }} {{ $formkit ? '' : 'disabled' }}"
+                href="{{ $nav->to('formkit_edit')->id($formkit?->getId()) }}">
                 <i class="far fa-edit"></i>
                 表單編輯
             </a>
 
-            <a class="nav-item nav-link {{ $menu->active('formkit_response_list') }} d-flex align-items-center gap-1"
-                href="{{ $nav->to('formkit_response_list')->var('formkit_id', $formkit->getId()) }}">
+            <a class="nav-item nav-link {{ $menu->active('formkit_response_list') }} {{ $formkit ? '' : 'disabled' }} d-flex align-items-center gap-1"
+                href="{{ $nav->to('formkit_response_list')->var('formkit_id', $formkit?->getId()) }}">
                 <i class="far fa-list"></i>
                 <span>觀看提交</span>
                 @if ($count)
