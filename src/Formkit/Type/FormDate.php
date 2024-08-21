@@ -116,12 +116,19 @@ class FormDate extends AbstractFormType
      * @throws \Exception
      * @since  __DEPLOY_VERSION__
      */
-    public function prepareView(array $data, array $content): array
+    public function prepareExportData(array $data, array $content): array
     {
-        $data = parent::prepareView($data, $content);
+        $data = parent::prepareExportData($data, $content);
 
         $data[$this->getLabel()] = Chronos::toFormat($data[$this->getLabel()], 'Y/m/d');
 
         return $data;
+    }
+
+    public function prepareViewData(array $content): array
+    {
+        return [
+            Chronos::toFormat($content[$this->getLabel()], 'Y/m/d')
+        ];
     }
 }

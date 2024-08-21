@@ -13,6 +13,7 @@ use Windwalker\IO\Input;
 use Windwalker\Utilities\Arr;
 use Windwalker\Utilities\Contract\LanguageInterface;
 
+use function Windwalker\collect;
 use function Windwalker\h;
 use function Windwalker\uid;
 
@@ -129,6 +130,40 @@ class FormCheckboxes extends FormSelect
      */
     public function prepareStore(array $data, AppRequest $request, string $ns): array
     {
+        return $data;
+    }
+
+    public function prepareViewLabels(): array
+    {
+        $labels = [$this->getLabel()];
+
+        if ($this->getData()->enable_other) {
+            $labels[] = $this->getLabel() . ': 其他';
+        }
+
+        return $labels;
+    }
+
+    public function prepareViewData(array $content): array
+    {
+        $data = [];
+        $options = collect();
+
+        $selected = (array) ($content[$this->getLabel()] ?? []);
+
+        $options[] = '<ul>';
+
+        foreach ($selected as $item) {
+            $options[] = "<li>{$item}</li>";
+        }
+
+        $options[] = '</ul>';
+
+        $otherLabel = $this->getLabel() . '_other';
+
+        $data[$this->getLabel()] = (string) $options->implode('');
+        $data['其他'] = $content[$otherLabel] ?? '';
+
         return $data;
     }
 }

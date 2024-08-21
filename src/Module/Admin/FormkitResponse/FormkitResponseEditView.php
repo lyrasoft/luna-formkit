@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Lyrasoft\Formkit\Module\Admin\FormkitResponse;
 
+use Lyrasoft\Formkit\Entity\Formkit;
 use Lyrasoft\Formkit\Module\Admin\FormkitResponse\Form\EditForm;
 use Lyrasoft\Formkit\Entity\FormkitResponse;
 use Lyrasoft\Formkit\Repository\FormkitResponseRepository;
+use Lyrasoft\Luna\User\UserService;
 use Unicorn\View\FormAwareViewModelTrait;
 use Unicorn\View\ORMAwareViewModelTrait;
 use Windwalker\Core\Application\AppContext;
@@ -22,7 +24,7 @@ use Windwalker\DI\Attributes\Autowire;
  * The FormkitResponseEditView class.
  */
 #[ViewModel(
-    layout: 'formkit-response-edit',
+    layout: 'formkit-response-preview',
     js: 'formkit-response-edit.js'
 )]
 class FormkitResponseEditView implements ViewModelInterface
@@ -33,6 +35,7 @@ class FormkitResponseEditView implements ViewModelInterface
 
     public function __construct(
         #[Autowire] protected FormkitResponseRepository $repository,
+        #[Autowire] protected UserService $userService
     ) {
     }
 
@@ -49,27 +52,31 @@ class FormkitResponseEditView implements ViewModelInterface
         $id = $app->input('id');
 
         /** @var FormkitResponse $item */
-        $item = $this->repository->getItem($id);
+        $item = $this->repository->mustGetItem($id);
+
+        $formkit = $this->orm->mustFindOne(Formkit::class, $item->getFormkitId());
 
         // Bind item for injection
         $view[FormkitResponse::class] = $item;
 
-        $form = $this->createForm(EditForm::class)
-            ->fill(
-                [
-                    'item' => $this->repository->getState()->getAndForget('edit.data')
-                        ?: $this->orm->extractEntity($item)
-                ]
-            );
+        // $form = $this->createForm(EditForm::class)
+        //     ->fill(
+        //         [
+        //             'item' => $this->repository->getState()->getAndForget('edit.data')
+        //                 ?: $this->orm->extractEntity($item)
+        //         ]
+        //     );
 
-        return compact('form', 'id', 'item');
+        $user = $this->userService->load(['id' => $item->getCreatedBy()]);
+
+        return compact('formkit', 'id', 'item', 'user');
     }
 
     #[ViewMetadata]
     protected function prepareMetadata(HtmlFrame $htmlFrame): void
     {
         $htmlFrame->setTitle(
-            $this->trans('unicorn.title.edit', title: 'FormkitResponse')
+            $this->trans('unicorn.title.edit', title: '填答')
         );
     }
 }

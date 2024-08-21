@@ -14,6 +14,8 @@ use Windwalker\Form\Field\AbstractField;
 use Windwalker\Form\Field\TextField;
 use Windwalker\Utilities\Contract\LanguageInterface;
 
+use Windwalker\Utilities\TypeCast;
+
 use function Windwalker\collect;
 
 abstract class AbstractFormType
@@ -51,7 +53,21 @@ abstract class AbstractFormType
         return $data;
     }
 
-    public function prepareView(array $data, array $content): array
+    public function prepareViewLabels(): array
+    {
+        return [
+            $this->getLabel()
+        ];
+    }
+
+    public function prepareViewData(array $content): array
+    {
+        $data[$this->getLabel()] = $content[$this->getLabel()] ?? '';
+
+        return $data;
+    }
+
+    public function prepareExportData(array $data, array $content): array
     {
         $data[$this->getLabel()] = $content[$this->getLabel()] ?? '';
 

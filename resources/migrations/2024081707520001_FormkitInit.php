@@ -49,7 +49,7 @@ $mig->up(
             FormkitResponse::class,
             function (Schema $schema) {
                 $schema->primary('id')->comment('Primary Key');
-                $schema->integer('formket_id');
+                $schema->integer('formkit_id');
                 $schema->json('content');
                 $schema->varchar('state');
                 $schema->varchar('from')->length(512);
@@ -64,7 +64,7 @@ $mig->up(
                 $schema->integer('modified_by')->comment('Modified User');
                 $schema->json('params');
 
-                $schema->addIndex('formket_id');
+                $schema->addIndex('formkit_id');
                 $schema->addIndex('created_by');
             }
         );

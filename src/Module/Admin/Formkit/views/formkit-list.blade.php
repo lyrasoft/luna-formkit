@@ -117,7 +117,6 @@ $workflow = $app->service(BasicStateWorkflow::class);
                                 :value="$item->state"
                                 :publish-up="$item->getPublishUp()"
                                 :publish-down="$item->getPublishDown()"
-                                data-foo="123"
                             >
 
                             </x-publishing-dropdown>
@@ -137,6 +136,9 @@ $workflow = $app->service(BasicStateWorkflow::class);
                                 class="btn btn-sm btn-outline-primary">
                                 <i class="far fa-list"></i>
                                 觀看提交
+                                @if ($item->res_count)
+                                    ({{ $item->res_count }})
+                                @endif
                             </a>
                         </td>
 

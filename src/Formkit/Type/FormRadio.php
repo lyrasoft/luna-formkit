@@ -9,6 +9,7 @@ use Windwalker\Form\Field\AbstractField;
 use Windwalker\Form\Field\RadioField;
 use Windwalker\Utilities\Contract\LanguageInterface;
 
+use function Windwalker\collect;
 use function Windwalker\uid;
 
 class FormRadio extends FormSelect

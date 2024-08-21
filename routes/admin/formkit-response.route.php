@@ -14,7 +14,7 @@ use Windwalker\Core\Router\RouteCreator;
 $router->group('formkit-response')
     ->extra('menu', ['sidemenu' => 'formkit_response_list'])
     ->register(function (RouteCreator $router) {
-        $router->any('formkit_response_list', '/formkit-response/list')
+        $router->any('formkit_response_list', '/formkit/{formkit_id}/response/list')
             ->controller(FormkitResponseController::class)
             ->view(FormkitResponseListView::class)
             ->postHandler('copy')

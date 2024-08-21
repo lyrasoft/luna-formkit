@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Lyrasoft\Formkit\Module\Admin\FormkitResponse;
 
-use Lyrasoft\Formkit\Module\Admin\FormkitResponse\Form\GridForm;
 use Lyrasoft\Formkit\Entity\FormkitResponse;
+use Lyrasoft\Formkit\Formkit\FormkitService;
+use Lyrasoft\Formkit\Formkit\Type\AbstractFormType;
+use Lyrasoft\Formkit\Module\Admin\FormkitResponse\Form\GridForm;
 use Lyrasoft\Formkit\Repository\FormkitResponseRepository;
 use Unicorn\View\FormAwareViewModelTrait;
 use Unicorn\View\ORMAwareViewModelTrait;
@@ -40,6 +42,7 @@ class FormkitResponseListView implements ViewModelInterface, FilterAwareViewMode
     public function __construct(
         #[Autowire]
         protected FormkitResponseRepository $repository,
+        protected FormkitService $formkitService,
     ) {
     }
 
@@ -53,13 +56,14 @@ class FormkitResponseListView implements ViewModelInterface, FilterAwareViewMode
      */
     public function prepare(AppContext $app, View $view): array
     {
+        $formkitId = (int) $app->input('formkit_id');
         $state = $this->repository->getState();
 
         // Prepare Items
-        $page     = $state->rememberFromRequest('page');
-        $limit    = $state->rememberFromRequest('limit') ?? 30;
-        $filter   = (array) $state->rememberFromRequest('filter');
-        $search   = (array) $state->rememberFromRequest('search');
+        $page = $state->rememberFromRequest('page');
+        $limit = $state->rememberFromRequest('limit') ?? 30;
+        $filter = (array) $state->rememberFromRequest('filter');
+        $search = (array) $state->rememberFromRequest('search');
         $ordering = $state->rememberFromRequest('list_ordering') ?? $this->getDefaultOrdering();
 
         $items = $this->repository->getListSelector()
@@ -81,7 +85,24 @@ class FormkitResponseListView implements ViewModelInterface, FilterAwareViewMode
 
         $showFilters = $this->isFiltered($filter);
 
-        return compact('items', 'pagination', 'form', 'showFilters', 'ordering');
+        // Fields
+        [$formkit, $fields] = $this->formkitService->getFormkitMeta($formkitId);
+
+        $previewFields = $fields->filter(
+            function (AbstractFormType $field) {
+                return (bool) $field->getData()->grid_preview;
+            }
+        );
+
+        return compact(
+            'items',
+            'pagination',
+            'form',
+            'showFilters',
+            'ordering',
+            'formkit',
+            'previewFields',
+        );
     }
 
     /**
@@ -103,8 +124,8 @@ class FormkitResponseListView implements ViewModelInterface, FilterAwareViewMode
     {
         return [
             'formkit_response.id',
-            'formkit_response.title',
-            'formkit_response.alias',
+            'formkit_response.content',
+            'formkit_response.ip',
         ];
     }
 

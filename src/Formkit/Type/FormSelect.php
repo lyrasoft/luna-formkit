@@ -10,6 +10,7 @@ use Windwalker\Form\Field\AbstractField;
 use Windwalker\Form\Field\ListField;
 use Windwalker\Utilities\Contract\LanguageInterface;
 
+use function Windwalker\collect;
 use function Windwalker\uid;
 
 class FormSelect extends AbstractFormType
@@ -112,5 +113,29 @@ class FormSelect extends AbstractFormType
                     }
                 }
             );
+    }
+
+    public function prepareViewLabels(): array
+    {
+        $labels = [$this->getLabel()];
+
+        if ($this->getData()->enable_other) {
+            $labels[] = $this->getLabel() . ': 其他';
+        }
+
+        return $labels;
+    }
+
+    public function prepareViewData(array $content): array
+    {
+        $data = [];
+        $data[] = $content[$this->getLabel()] ?? '';
+
+        if ($this->getData()->enable_other) {
+            $otherLabel = $this->getLabel() . '_other';
+            $data[] = $content[$otherLabel] ?? '';
+        }
+
+        return $data;
     }
 }

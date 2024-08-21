@@ -47,11 +47,11 @@ class FormkitController
 
         /** @var AbstractFormType $field */
         foreach ($fields as $field) {
-            $field->prepareStore($content, $appRequest, $ns);
+            $content = $field->prepareStore($content, $appRequest, $ns);
         }
 
         $res = new FormkitResponse();
-        $res->setFormketId($formkit->getId());
+        $res->setFormkitId($formkit->getId());
         $res->setState(ResState::PENDING);
         $res->setFrom($app->getNav()->localReferrer());
         $res->setContent($content);

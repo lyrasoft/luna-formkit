@@ -62,7 +62,7 @@ $seeder->import(
                 $agent = new Agent([], $faker->userAgent());
 
                 $res = new FormkitResponse();
-                $res->setFormketId($item->getId());
+                $res->setFormkitId($item->getId());
                 $res->setContent($resContent);
                 $res->setState(
                     $faker->randomElement(ResState::cases())

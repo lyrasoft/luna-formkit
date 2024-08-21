@@ -114,6 +114,28 @@ class FormGridRadioScale extends AbstractFormType
         return $data;
     }
 
+    public function prepareViewLabels(): array
+    {
+        $labels = [];
+
+        foreach ($this->data->rows as $i => $row) {
+            $labels[] = $this->getLabel() . ': ' . $row['text'];
+        }
+
+        return $labels;
+    }
+
+    public function prepareViewData(array $content): array
+    {
+        $data = [];
+
+        foreach ($this->data->rows as $i => $row) {
+            $data[] = $content[$this->getLabel()][$row['text']] ?? '';
+        }
+
+        return $data;
+    }
+
     /**
      * prepareView
      *
@@ -124,7 +146,7 @@ class FormGridRadioScale extends AbstractFormType
      *
      * @since  __DEPLOY_VERSION__
      */
-    public function prepareView(array $data, array $content): array
+    public function prepareExportData(array $data, array $content): array
     {
         foreach ($this->data->rows as $i => $row) {
             $data[sprintf('%s [%s]', $this->getLabel(), $row['text'])]

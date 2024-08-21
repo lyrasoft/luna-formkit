@@ -74,10 +74,12 @@ $uniScript->addRoute(
         </div>
 
         @foreach ($fields as $field)
-            @php($formField = $form[$field->getLabel()])
-            @if (!$formField)
-                @continue
-            @endif
+            @php
+                $formField = $form[$field->getLabel()];
+                if (!$formField) {
+                    throw new \OutOfBoundsException('FormField of ' . $field->getLabel() . ' not found.');
+                }
+            @endphp
             <div class="c-formkit-field-wrapper mb-4" data-uid="{{ $formField->get('uid') }}">
                 @include($formkitService->getFieldLayout($field))
             </div>

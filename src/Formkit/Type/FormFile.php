@@ -18,6 +18,8 @@ use Windwalker\Http\Helper\HeaderHelper;
 use Windwalker\Http\Helper\UploadedFileHelper;
 use Windwalker\Utilities\Contract\LanguageInterface;
 
+use function Windwalker\collect;
+use function Windwalker\DOM\h;
 use function Windwalker\uid;
 
 /**
@@ -96,27 +98,16 @@ class FormFile extends AbstractFormType
     {
         $files = $request->file($ns)[$this->getLabel()];
 
+        $data[$this->getLabel()] = [];
+
         if ($this->data->max > 1) {
             /** @var UploadedFileInterface $file */
             foreach ($files as $i => $file) {
-                $data[$this->getLabel() . '_' . ($i + 1)] = $this->upload($file);
+                $data[$this->getLabel()][] = $this->upload($file);
             }
         } else {
             /** @var UploadedFileInterface $files */
-            $data[$this->getLabel()] = $this->upload($files);
-        }
-
-        return $data;
-    }
-
-    public function prepareView(array $data, array $content): array
-    {
-        if ($this->data->max > 1) {
-            foreach (range(1, $this->data->max) as $i => $file) {
-                $data[$this->getLabel() . '_' . ($i + 1)] = $content[$this->getLabel() . '_' . ($i + 1)] ?? '';
-            }
-        } else {
-            $data = parent::prepareView($data, $content);
+            $data[$this->getLabel()][] = $this->upload($files);
         }
 
         return $data;
@@ -143,5 +134,35 @@ class FormFile extends AbstractFormType
         );
 
         return (string) $result?->getUri();
+    }
+
+    public function prepareViewData(array $content): array
+    {
+        $text = collect((array) ($content[$this->getLabel()] ?? []));
+
+        $text = $text->filter()->mapWithKeys(
+            function ($item, $i) {
+                yield $i => h(
+                    'div',
+                    [],
+                    h('a', ['href' => $item, 'target' => '_blank'], '觀看檔案 ' . $i)
+                );
+            }
+        );
+
+        return [(string) $text->implode("\n")];
+    }
+
+    public function prepareExportData(array $data, array $content): array
+    {
+        if ($this->data->max > 1) {
+            foreach (range(1, $this->data->max) as $i => $file) {
+                $data[$this->getLabel() . '_' . ($i + 1)] = $content[$this->getLabel() . '_' . ($i + 1)] ?? '';
+            }
+        } else {
+            $data = parent::prepareExportData($data, $content);
+        }
+
+        return $data;
     }
 }

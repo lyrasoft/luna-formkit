@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lyrasoft\Formkit\Module\Admin\FormkitResponse\Form;
 
+use Lyrasoft\Formkit\Enum\ResState;
 use Unicorn\Enum\BasicState;
 use Windwalker\Core\Language\TranslatorTrait;
 use Windwalker\Form\Attributes\FormDefine;
@@ -33,7 +34,7 @@ class GridForm
         $form->add('formkit_response.state', ListField::class)
             ->label($this->trans('unicorn.field.state'))
             ->option($this->trans('unicorn.select.placeholder'), '')
-            ->registerFromEnums(BasicState::class, $this->lang)
+            ->registerFromEnums(ResState::class, $this->lang)
             ->onchange('this.form.submit()');
     }
 

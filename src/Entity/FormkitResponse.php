@@ -32,8 +32,8 @@ class FormkitResponse implements EntityInterface
     #[Column('id'), PK, AutoIncrement]
     protected ?int $id = null;
 
-    #[Column('formket_id')]
-    protected int $formketId = 0;
+    #[Column('formkit_id')]
+    protected int $formkitId = 0;
 
     #[Column('content')]
     #[Cast(JsonCast::class)]
@@ -101,14 +101,14 @@ class FormkitResponse implements EntityInterface
         return $this;
     }
 
-    public function getFormketId(): int
+    public function getFormkitId(): int
     {
-        return $this->formketId;
+        return $this->formkitId;
     }
 
-    public function setFormketId(int $formketId): static
+    public function setFormkitId(int $formkitId): static
     {
-        $this->formketId = $formketId;
+        $this->formkitId = $formkitId;
 
         return $this;
     }

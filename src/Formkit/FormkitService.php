@@ -124,7 +124,11 @@ class FormkitService
 
                 $fieldInstance = $this->getFormInstance($data['type'], $data);
 
-                $form->addField($fieldInstance->toFormField($this->app))
+                $form->addField(
+                    $fieldInstance->toFormField($this->app)
+                        ->setName($fieldInstance->getLabel())
+                        ->label($fieldInstance->getLabel())
+                )
                     ->required((bool) $data->required)
                     ->set('text', (string) $data->description)
                     ->setAttribute('id', 'input-' . $data->uid)
@@ -176,7 +180,7 @@ class FormkitService
         $content = [];
 
         foreach ($fields as $field) {
-            $content = $field->prepareView($content, $rawContent);
+            $content = $field->prepareExportData($content, $rawContent);
         }
 
         return $content;
