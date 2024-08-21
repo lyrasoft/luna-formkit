@@ -67,7 +67,14 @@ abstract class AbstractFormType
         return $data;
     }
 
-    public function prepareExportData(array $data, array $content): array
+    public function prepareExportLabels(): array
+    {
+        return [
+            $this->getLabel() => $this->getLabel()
+        ];
+    }
+
+    public function prepareExportData(array $content): array
     {
         $data[$this->getLabel()] = $content[$this->getLabel()] ?? '';
 

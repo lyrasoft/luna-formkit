@@ -166,4 +166,44 @@ class FormCheckboxes extends FormSelect
 
         return $data;
     }
+
+    public function prepareExportLabels(): array
+    {
+        $options = $this->getOptions();
+
+        $labels = [];
+
+        foreach ($options as $option) {
+            $label = $this->getLabel() . '_' . $option['text'];
+
+            $labels[$label] = $label;
+        }
+
+        if ($this->hasOther()) {
+            $labels[$this->getLabel() . '_other'] = $this->getLabel() . '_其他欄位';
+        }
+
+        return $labels;
+    }
+
+    public function prepareExportData(array $content): array
+    {
+        $options = $this->getOptions();
+
+        $data = [];
+
+        $values = (array) ($content[$this->getLabel()] ?? []);
+
+        foreach ($options as $option) {
+            $label = $this->getLabel() . '_' . $option['text'];
+
+            $data[$label] = (int) in_array($option['text'], $values);
+        }
+
+        if ($this->hasOther()) {
+            $data[$this->getLabel() . '_other'] = $content[$this->getLabel() . '_other'] ?? '';
+        }
+
+        return $data;
+    }
 }

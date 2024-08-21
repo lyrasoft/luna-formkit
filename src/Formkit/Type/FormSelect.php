@@ -138,4 +138,27 @@ class FormSelect extends AbstractFormType
 
         return $data;
     }
+
+    public function prepareExportLabels(): array
+    {
+        $labels = parent::prepareExportLabels();
+
+        if ($this->hasOther()) {
+            $labels[$this->getLabel() . '_other'] = $this->getLabel() . '_其他';
+        }
+
+        return $labels;
+    }
+
+    public function prepareExportData(array $content): array
+    {
+        $data = parent::prepareExportData($content);
+
+        if ($this->hasOther()) {
+            $otherLabel = $this->getLabel() . '_other';
+            $data[$this->getLabel() . '_other'] = $content[$otherLabel] ?? '';
+        }
+
+        return $data;
+    }
 }

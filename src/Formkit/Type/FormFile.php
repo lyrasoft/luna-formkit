@@ -153,14 +153,31 @@ class FormFile extends AbstractFormType
         return [(string) $text->implode("\n")];
     }
 
-    public function prepareExportData(array $data, array $content): array
+    public function prepareExportLabels(): array
+    {
+        $labels = [];
+
+        if ($this->data->max > 1) {
+            foreach (range(1, $this->data->max) as $i => $file) {
+                $label = $this->getLabel() . '_' . ($i + 1);
+
+                $labels[$label] = $label;
+            }
+        } else {
+            $labels = parent::prepareExportLabels();
+        }
+
+        return $labels;
+    }
+
+    public function prepareExportData(array $content): array
     {
         if ($this->data->max > 1) {
             foreach (range(1, $this->data->max) as $i => $file) {
-                $data[$this->getLabel() . '_' . ($i + 1)] = $content[$this->getLabel() . '_' . ($i + 1)] ?? '';
+                $data[$this->getLabel() . '_' . ($i + 1)] = $content[$this->getLabel()][$i] ?? '';
             }
         } else {
-            $data = parent::prepareExportData($data, $content);
+            $data[$this->getLabel()] = parent::prepareExportData($content);
         }
 
         return $data;

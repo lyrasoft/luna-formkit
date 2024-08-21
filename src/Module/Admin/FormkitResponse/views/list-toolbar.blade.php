@@ -60,17 +60,26 @@ use Windwalker\Form\Form;
         @lang('unicorn.toolbar.state.change')
     </x-state-dropdown>
 
-    @if ($form?->countFields(null, 'batch'))
-        {{-- Batch --}}
-        <button type="button" class="btn btn-dark btn-sm uni-btn-batch"
-            @click="grid.validateChecked(null, function () {
-                (new bootstrap.Modal('#batch-modal')).show();
-            })"
-        >
-            <i class="fa fa-sliders"></i>
-            @lang('unicorn.toolbar.batch')
-        </button>
-    @endif
+    <a href="{{ $nav->self()->var('export', '1') }}"
+        class="btn btn-sm btn-success"
+        target="_blank"
+        style="width: 100px"
+    >
+        <i class="far fa-file excel"></i>
+        匯出
+    </a>
+
+{{--    @if ($form?->countFields(null, 'batch'))--}}
+{{--        --}}{{-- Batch --}}
+{{--        <button type="button" class="btn btn-dark btn-sm uni-btn-batch"--}}
+{{--            @click="grid.validateChecked(null, function () {--}}
+{{--                (new bootstrap.Modal('#batch-modal')).show();--}}
+{{--            })"--}}
+{{--        >--}}
+{{--            <i class="fa fa-sliders"></i>--}}
+{{--            @lang('unicorn.toolbar.batch')--}}
+{{--        </button>--}}
+{{--    @endif--}}
 
     {{-- Delete --}}
     <button type="button" class="btn btn-outline-danger btn-sm uni-btn-delete"

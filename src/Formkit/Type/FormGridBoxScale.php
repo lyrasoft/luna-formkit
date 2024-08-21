@@ -131,4 +131,40 @@ class FormGridBoxScale extends FormGridRadioScale
 
         return $data;
     }
+
+    public function prepareExportLabels(): array
+    {
+        $labels = [];
+
+        foreach ($this->data->rows as $i => $row) {
+            $label = $this->getLabel() . '_' . $row['text'];
+
+            foreach ($this->data->columns as $c => $column) {
+                $colLabel = $label . '_' . $column['text'];
+
+                $labels[$colLabel] = $colLabel;
+            }
+        }
+
+        return $labels;
+    }
+
+    public function prepareExportData(array $content): array
+    {
+        $data = [];
+
+        foreach ($this->data->rows as $i => $row) {
+            $label = $this->getLabel() . '_' . $row['text'];
+
+            $values = $content[$this->getLabel()][$row['text']] ?? [];
+
+            foreach ($this->data->columns as $c => $column) {
+                $colLabel = $label . '_' . $column['text'];
+
+                $data[$colLabel] = (int) in_array($column['text'], $values);
+            }
+        }
+
+        return $data;
+    }
 }

@@ -136,21 +136,29 @@ class FormGridRadioScale extends AbstractFormType
         return $data;
     }
 
-    /**
-     * prepareView
-     *
-     * @param array $data
-     * @param array $content
-     *
-     * @return  array
-     *
-     * @since  __DEPLOY_VERSION__
-     */
-    public function prepareExportData(array $data, array $content): array
+    public function prepareExportLabels(): array
     {
+        $labels = [];
+
         foreach ($this->data->rows as $i => $row) {
-            $data[sprintf('%s [%s]', $this->getLabel(), $row['text'])]
-                = $content[$this->getLabel() . '_' . $row['text']] ?? '';
+            $label = $this->getLabel() . '_' . $row['text'];
+
+            $labels[$label] = $label;
+        }
+
+        return $labels;
+    }
+
+    public function prepareExportData(array $content): array
+    {
+        $data = [];
+
+        foreach ($this->data->rows as $i => $row) {
+            $label = $this->getLabel() . '_' . $row['text'];
+
+            $value = $content[$this->getLabel()][$row['text']] ?? '';
+
+            $data[$label] = $value;
         }
 
         return $data;

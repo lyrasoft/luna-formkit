@@ -4,22 +4,29 @@ declare(strict_types=1);
 
 namespace Lyrasoft\Formkit\Module\Admin\FormkitResponse;
 
+use Lyrasoft\Formkit\Entity\Formkit;
 use Lyrasoft\Formkit\Entity\FormkitResponse;
 use Lyrasoft\Formkit\Formkit\FormkitService;
 use Lyrasoft\Formkit\Formkit\Type\AbstractFormType;
 use Lyrasoft\Formkit\Module\Admin\FormkitResponse\Form\GridForm;
 use Lyrasoft\Formkit\Repository\FormkitResponseRepository;
+use Lyrasoft\Luna\User\UserService;
+use Lyrasoft\Toolkit\Spreadsheet\PhpSpreadsheetWriter;
+use Lyrasoft\Toolkit\Spreadsheet\SpreadsheetKit;
+use Unicorn\Selector\ListSelector;
 use Unicorn\View\FormAwareViewModelTrait;
 use Unicorn\View\ORMAwareViewModelTrait;
 use Windwalker\Core\Application\AppContext;
 use Windwalker\Core\Attributes\ViewMetadata;
 use Windwalker\Core\Attributes\ViewModel;
+use Windwalker\Core\DateTime\ChronosService;
 use Windwalker\Core\Html\HtmlFrame;
 use Windwalker\Core\Language\TranslatorTrait;
 use Windwalker\Core\View\Contract\FilterAwareViewModelInterface;
 use Windwalker\Core\View\Traits\FilterAwareViewModelTrait;
 use Windwalker\Core\View\View;
 use Windwalker\Core\View\ViewModelInterface;
+use Windwalker\Data\Collection;
 use Windwalker\DI\Attributes\Autowire;
 
 /**
@@ -49,7 +56,7 @@ class FormkitResponseListView implements ViewModelInterface, FilterAwareViewMode
     /**
      * Prepare view data.
      *
-     * @param  AppContext  $app   The request app context.
+     * @param  AppContext  $app  The request app context.
      * @param  View        $view  The view object.
      *
      * @return  array
@@ -72,10 +79,18 @@ class FormkitResponseListView implements ViewModelInterface, FilterAwareViewMode
                 $search['*'] ?? '',
                 $this->getSearchFields()
             )
+            ->whereRaw('formkit_response.formkit_id', $formkitId)
             ->ordering($ordering)
             ->page($page)
             ->limit($limit)
             ->setDefaultItemClass(FormkitResponse::class);
+
+        // Fields
+        [$formkit, $fields] = $this->formkitService->getFormkitMeta($formkitId);
+
+        if ($app->input('export')) {
+            $app->call($this->export(...), compact('formkit', 'items', 'fields'));
+        }
 
         $pagination = $items->getPagination();
 
@@ -84,9 +99,6 @@ class FormkitResponseListView implements ViewModelInterface, FilterAwareViewMode
             ->fill(compact('search', 'filter'));
 
         $showFilters = $this->isFiltered($filter);
-
-        // Fields
-        [$formkit, $fields] = $this->formkitService->getFormkitMeta($formkitId);
 
         $previewFields = $fields->filter(
             function (AbstractFormType $field) {
@@ -135,5 +147,57 @@ class FormkitResponseListView implements ViewModelInterface, FilterAwareViewMode
         $htmlFrame->setTitle(
             $this->trans('unicorn.title.grid', title: 'FormkitResponse')
         );
+    }
+
+    public function export(
+        UserService $userService,
+        ChronosService $chronosService,
+        Formkit $formkit,
+        ListSelector $items,
+        Collection $fields,
+    ) {
+        $items = $items->limit(0)
+            ->page(1)
+            ->getIterator(FormkitResponse::class);
+
+        $excel = SpreadsheetKit::createPhpSpreadsheetWriter();
+
+        $excel->addColumn('id', 'ID');
+        $excel->addColumn('user', '會員');
+        $excel->addColumn('time', '建立時間');
+        $excel->addColumn('state', '狀態');
+
+        /** @var AbstractFormType $field */
+        foreach ($fields as $field) {
+            foreach ($field->prepareExportLabels() as $key => $label) {
+                $excel->addColumn($key, $label)->setWidth(15);
+            }
+        }
+
+        /** @var FormkitResponse $item */
+        foreach ($items as $item) {
+            $excel->addRow(
+                function (PhpSpreadsheetWriter $row) use ($fields, $chronosService, $userService, $item) {
+                    $user = $userService->load(['id' => $item->getCreatedBy()]);
+
+                    $row->setRowCell('id', $item->getId());
+                    $row->setRowCell('user', $user?->getName() ?: '');
+                    $row->setRowCell('time', $chronosService->toLocalFormat($item->getCreatedBy()));
+                    $row->setRowCell('state', $item->getState()->getTitle($this->lang));
+
+                    $content = $item->getContent();
+
+                    /** @var AbstractFormType $field */
+                    foreach ($fields as $field) {
+                        foreach ($field->prepareExportData($content) as $key => $value) {
+                            $row->setRowCell((string) $key, $value);
+                        }
+                    }
+                }
+            );
+        }
+
+        $excel->printHtmlTable();
+        die;
     }
 }

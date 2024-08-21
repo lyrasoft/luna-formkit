@@ -15,6 +15,11 @@ trait ListFormkitTrait
 {
     use TranslatorTrait;
 
+    public function getOptions(): array
+    {
+        return (array) $this->getData()->options;
+    }
+
     public function hasOther(): bool
     {
         return (bool) $this->data->enable_other;

@@ -180,7 +180,7 @@ class FormkitService
         $content = [];
 
         foreach ($fields as $field) {
-            $content = $field->prepareExportData($content, $rawContent);
+            $content = $field->prepareExportData($rawContent);
         }
 
         return $content;
