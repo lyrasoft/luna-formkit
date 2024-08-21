@@ -87,7 +87,7 @@ class FormkitPackage extends AbstractPackage implements ServiceProviderInterface
         $installer->installMigrations(static::path('resources/migrations/**/*'), 'migrations');
         $installer->installSeeders(static::path('resources/seeders/**/*'), 'seeders');
         $installer->installRoutes(static::path('routes/**/*.php'), 'routes');
-        $installer->installViews(static::path('views/*.blade.php'), 'views');
+        $installer->installViews(static::path('views/**/*.blade.php'), 'views');
 
         $this->installModules($installer, 'formkit');
         $this->installModules($installer, 'formkit_response', ['admin', 'model']);
