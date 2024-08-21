@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lyrasoft\Formkit;
 
+use Lyrasoft\Formkit\Component\FormkitEditNavComponent;
 use Lyrasoft\Formkit\Component\PublishingDropdownComponent;
 use Lyrasoft\Formkit\Formkit\FormkitService;
 use Windwalker\Core\Package\AbstractPackage;
@@ -32,6 +33,7 @@ class FormkitPackage extends AbstractPackage implements ServiceProviderInterface
             'renderer.edge.components',
             [
                 'publishing-dropdown' => PublishingDropdownComponent::class,
+                'formkit-edit-nav' => FormkitEditNavComponent::class,
             ]
         );
 

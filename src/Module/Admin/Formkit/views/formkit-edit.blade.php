@@ -68,6 +68,12 @@ $uniScript->data(
     @include('edit-toolbar')
 @stop
 
+@section('banner')
+    @parent
+
+    <x-formkit-edit-nav :formkit="$item" />
+@stop
+
 @section('content')
     <form name="admin-form" id="admin-form"
         uni-form-validate='{"scroll": true}'

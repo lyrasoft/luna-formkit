@@ -76,6 +76,10 @@ $workflow = $app->service(BasicStateWorkflow::class);
                     </th>
 
                     <th class="text-nowrap" style="width: 5%">
+                        前台
+                    </th>
+
+                    <th class="text-nowrap" style="width: 5%">
                         觀看提交
                     </th>
 
@@ -129,6 +133,23 @@ $workflow = $app->service(BasicStateWorkflow::class);
                                     {{ $item->getTitle() }}
                                 </a>
                             </div>
+                        </td>
+
+                        <td class="text-nowrap">
+                            <a href="{{ $item->makeLink($nav) }}"
+                                class="btn btn-sm btn-outline-info"
+                                target="_blank"
+                            >
+                                <i class="far fa-eye"></i>
+                                前往
+                            </a>
+                            <button type="button"
+                                class="btn btn-sm btn-outline-info"
+                                onclick="navigator.clipboard.writeText('{{ $item->makeLink($nav)->full() }}');"
+                            >
+                                <i class="far fa-copy"></i>
+                                複製
+                            </button>
                         </td>
 
                         <td class="text-nowrap">

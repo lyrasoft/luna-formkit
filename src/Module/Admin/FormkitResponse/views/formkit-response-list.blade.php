@@ -41,6 +41,12 @@ $workflow = $app->service(ResponseWorkflow::class);
     @include('list-toolbar')
 @stop
 
+@section('banner')
+    @parent
+
+    <x-formkit-edit-nav :formkit="$formkit" />
+@stop
+
 @section('content')
     <form id="admin-form" action="" x-data="{ grid: $store.grid }"
         x-ref="gridForm"

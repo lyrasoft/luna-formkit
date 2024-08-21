@@ -66,5 +66,10 @@ class FormkitItemView implements ViewModelInterface
     public function prepareMetadata(HtmlFrame $htmlFrame, Formkit $item): void
     {
         $htmlFrame->setTitle($item->getTitle());
+        $htmlFrame->setDescriptionIfNotEmpty(
+            $item->getDescription(),
+            150
+        );
+        $htmlFrame->setCoverImagesIfNotEmpty($item->getImage());
     }
 }

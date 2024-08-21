@@ -53,6 +53,13 @@ $pageService = $app->retrieve(PageService::class);
     </button>
 
     @if ($item)
+        <a href="{{ $nav->to('form_response_list')->var('formkit_id', $item->getId()) }}"
+            class="btn btn-sm btn-outline-dark"
+            target="_blank">
+            <i class="far fa-list"></i>
+            觀看提交
+        </a>
+
         @php($s = $pageService->genPreviewSecret($item->getId()))
         <a href="{{ $item->makeLink($nav)->var('s', $s) }}"
             class="btn btn-sm btn-outline-info"

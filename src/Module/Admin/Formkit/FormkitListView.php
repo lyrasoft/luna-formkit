@@ -112,7 +112,7 @@ class FormkitListView implements ViewModelInterface, FilterAwareViewModelInterfa
     protected function prepareMetadata(HtmlFrame $htmlFrame): void
     {
         $htmlFrame->setTitle(
-            $this->trans('unicorn.title.grid', title: 'Formkit')
+            $this->trans('unicorn.title.grid', title: '表單')
         );
     }
 }

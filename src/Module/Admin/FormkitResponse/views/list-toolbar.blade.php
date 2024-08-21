@@ -32,22 +32,14 @@ use Windwalker\Form\Form;
 ?>
 
 <div x-title="toolbar" x-data="{ form: $store.grid.form, grid: $store.grid }" class="l-toolbar">
-    {{-- Create --}}
-    <a class="btn btn-primary btn-sm uni-btn-new"
-        href="{{ $nav->to('formkit_response_edit')->var('new', 1) }}"
-        style="min-width: 150px"
+    <a href="{{ $nav->self()->var('export', '1') }}"
+        class="btn btn-sm btn-success"
+        target="_blank"
+        style="width: 150px"
     >
-        <i class="fa fa-plus"></i>
-        @lang('unicorn.toolbar.new')
+        <i class="far fa-file-excel"></i>
+        匯出
     </a>
-
-    {{-- Duplicate --}}
-    <button type="button" class="btn btn-info btn-sm uni-btn-duplicate"
-        @click="grid.form.post()"
-    >
-        <i class="fa fa-clone"></i>
-        @lang('unicorn.toolbar.duplicate')
-    </button>
 
     {{-- Change State --}}
     <x-state-dropdown color-on="text"
@@ -59,15 +51,6 @@ use Windwalker\Form\Form;
     >
         @lang('unicorn.toolbar.state.change')
     </x-state-dropdown>
-
-    <a href="{{ $nav->self()->var('export', '1') }}"
-        class="btn btn-sm btn-success"
-        target="_blank"
-        style="width: 100px"
-    >
-        <i class="far fa-file excel"></i>
-        匯出
-    </a>
 
 {{--    @if ($form?->countFields(null, 'batch'))--}}
 {{--        --}}{{-- Batch --}}

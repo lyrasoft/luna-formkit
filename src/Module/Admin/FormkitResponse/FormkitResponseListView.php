@@ -81,7 +81,7 @@ class FormkitResponseListView implements ViewModelInterface, FilterAwareViewMode
                 $search['*'] ?? '',
                 $this->getSearchFields()
             )
-            ->whereRaw('formkit_response.formkit_id', $formkitId)
+            ->where('formkit_response.formkit_id', $formkitId)
             ->ordering($ordering)
             ->page($page)
             ->limit($limit)
@@ -89,6 +89,8 @@ class FormkitResponseListView implements ViewModelInterface, FilterAwareViewMode
 
         // Fields
         [$formkit, $fields] = $this->formkitService->getFormkitMeta($formkitId);
+
+        $view[Formkit::class] = $formkit;
 
         if ($app->input('export')) {
             return $app->call($this->export(...), compact('formkit', 'items', 'fields'));
@@ -144,10 +146,10 @@ class FormkitResponseListView implements ViewModelInterface, FilterAwareViewMode
     }
 
     #[ViewMetadata]
-    protected function prepareMetadata(HtmlFrame $htmlFrame): void
+    protected function prepareMetadata(HtmlFrame $htmlFrame, Formkit $formkit): void
     {
         $htmlFrame->setTitle(
-            $this->trans('unicorn.title.grid', title: 'FormkitResponse')
+            '觀看提交: ' . $formkit->getTitle()
         );
     }
 

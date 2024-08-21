@@ -69,7 +69,7 @@ class FormkitEditView implements ViewModelInterface
     protected function prepareMetadata(HtmlFrame $htmlFrame): void
     {
         $htmlFrame->setTitle(
-            $this->trans('unicorn.title.edit', title: 'Formkit')
+            $this->trans('unicorn.title.edit', title: '表單')
         );
     }
 }
