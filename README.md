@@ -106,6 +106,11 @@ Short-code usage:
 [formkit id=123 force=1]
 ```
 
+### Formkit Publish Down
+
+When as formkit is render by short-code and was publish down, there are another `formkit/formkit-unpublish.blade.php` 
+layout to show end information, it is default empty, you can modify it if you need.
+
 ## Configure Mail
 
 In `etc/packages/formkit.php`, you can add custom cc, bcc or target roles to receive mails.
@@ -131,3 +136,72 @@ The users fetch by roles, must enable `Receive Email` that can receive mail.
     // ...
 ```
 
+To modify mail layout, see `mail/formkit-receiver-mail.blade.php` and `formkit/formkit-preview-table.blade.php`
+
+## Form Fields And Components
+
+### Add Custom Widget to Field Cards
+
+There has 3 porisions you can insert widgets to field card:
+
+- start
+- end
+- toolbar
+
+![p-001-2024-08-22-02-48-28](https://github.com/user-attachments/assets/eea57150-c804-4a92-ac41-1936661b0861)
+
+The code example:
+
+```ts
+import '@main';
+import type { App } from 'vue';
+
+const { watch, ref } = Vue;
+
+u.on('formkit.prepared', (app: App) => {
+  app.provide('field.card.end', FieldCardEnd);
+});
+
+const FieldCardEnd = Vue.defineComponent({
+  name: 'FieldCardEnd',
+  template: `
+  <div class="row">
+    <div class="form-group col-lg-3">
+      <label class="form-label" for="">背景顏色</label>
+      <div>
+        <input type="color" class="form-control"
+          v-model.lazy="item.background_color" />
+      </div>
+    </div>
+    ...
+  </div>
+  `,
+  props: {
+    modelValue: null,
+  },
+  setup(props, { emit }) {
+    const item = ref(props.modelValue);
+
+    watch(item, (v) => {
+      emit('update:modelValue', v);
+    }, { deep: true });
+
+    return {
+      item
+    };
+  }
+});
+```
+
+### Override Field Edit Components
+
+Fields components is localted at `assets/src/fields/*.ts`, copy the file you want to override to root project's `resources/assets/src`.
+
+And use `$asset->alias()` to override this file.
+
+```php
+$asset->alias(
+    'vendor/lyrasoft/formkit/dist/fields/form-text.js',
+    'js/path/to/form-text.js',
+);
+```
