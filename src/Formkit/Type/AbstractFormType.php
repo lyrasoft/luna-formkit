@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lyrasoft\Formkit\Formkit\Type;
 
+use Lyrasoft\Formkit\Entity\Formkit;
 use Windwalker\Core\Application\AppContext;
 use Windwalker\Core\Application\Context\AppRequestInterface;
 use Windwalker\Core\Application\ServiceAwareInterface;
@@ -48,7 +49,7 @@ abstract class AbstractFormType
             ->placeholder((string) $this->data->placeholder);
     }
 
-    public function prepareStore(array $data, AppRequest $request, string $ns): array
+    public function prepareStore(AppRequest $request, Formkit $formkit, array $data, string $ns): array
     {
         return $data;
     }

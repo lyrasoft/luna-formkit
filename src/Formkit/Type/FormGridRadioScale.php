@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lyrasoft\Formkit\Formkit\Type;
 
+use Lyrasoft\Formkit\Entity\Formkit;
 use Windwalker\Core\Application\Context\AppRequestInterface;
 use Windwalker\Core\Http\AppRequest;
 use Windwalker\Utilities\Arr;
@@ -90,15 +91,16 @@ class FormGridRadioScale extends AbstractFormType
     /**
      * prepareStore
      *
-     * @param array        $data
      * @param  AppRequest  $request
+     * @param  Formkit     $formkit
+     * @param array        $data
      * @param string       $ns
      *
      * @return  array
      *
      * @since  __DEPLOY_VERSION__
      */
-    public function prepareStore(array $data, AppRequest $request, string $ns): array
+    public function prepareStore(AppRequest $request, Formkit $formkit, array $data, string $ns): array
     {
         $new = Arr::flatten(
             [

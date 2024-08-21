@@ -47,7 +47,7 @@ class FormkitController
 
         /** @var AbstractFormType $field */
         foreach ($fields as $field) {
-            $content = $field->prepareStore($content, $appRequest, $ns);
+            $content = $field->prepareStore($appRequest, $formkit, $content, $ns);
         }
 
         $res = new FormkitResponse();

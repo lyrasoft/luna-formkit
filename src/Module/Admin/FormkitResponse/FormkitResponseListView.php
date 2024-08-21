@@ -29,6 +29,8 @@ use Windwalker\Core\View\ViewModelInterface;
 use Windwalker\Data\Collection;
 use Windwalker\DI\Attributes\Autowire;
 
+use function Windwalker\now;
+
 /**
  * The FormkitResponseListView class.
  */
@@ -61,7 +63,7 @@ class FormkitResponseListView implements ViewModelInterface, FilterAwareViewMode
      *
      * @return  array
      */
-    public function prepare(AppContext $app, View $view): array
+    public function prepare(AppContext $app, View $view): mixed
     {
         $formkitId = (int) $app->input('formkit_id');
         $state = $this->repository->getState();
@@ -89,7 +91,7 @@ class FormkitResponseListView implements ViewModelInterface, FilterAwareViewMode
         [$formkit, $fields] = $this->formkitService->getFormkitMeta($formkitId);
 
         if ($app->input('export')) {
-            $app->call($this->export(...), compact('formkit', 'items', 'fields'));
+            return $app->call($this->export(...), compact('formkit', 'items', 'fields'));
         }
 
         $pagination = $items->getPagination();
@@ -182,7 +184,7 @@ class FormkitResponseListView implements ViewModelInterface, FilterAwareViewMode
 
                     $row->setRowCell('id', $item->getId());
                     $row->setRowCell('user', $user?->getName() ?: '');
-                    $row->setRowCell('time', $chronosService->toLocalFormat($item->getCreatedBy()));
+                    $row->setRowCell('time', $chronosService->toLocalFormat($item->getCreated()));
                     $row->setRowCell('state', $item->getState()->getTitle($this->lang));
 
                     $content = $item->getContent();
@@ -197,7 +199,12 @@ class FormkitResponseListView implements ViewModelInterface, FilterAwareViewMode
             );
         }
 
-        $excel->printHtmlTable();
-        die;
+        $filename = sprintf(
+            '[匯出] %s - %s.xlsx',
+            $formkit->getTitle(),
+            now('Y-m-d-H-i-s')
+        );
+
+        return $excel->toAttachmentResponse($filename);
     }
 }

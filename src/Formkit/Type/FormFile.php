@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace Lyrasoft\Formkit\Formkit\Type;
 
+use Lyrasoft\Formkit\Entity\Formkit;
 use Psr\Http\Message\UploadedFileInterface;
 use Unicorn\Aws\S3Service;
 use Unicorn\Field\FileDragField;
+use Unicorn\Storage\Adapter\LocalStorage;
 use Unicorn\Upload\FileUploadService;
 use Windwalker\Core\Application\Context\AppRequestInterface;
 use Windwalker\Core\Application\ServiceAwareInterface;
 use Windwalker\Core\Form\Exception\ValidateFailException;
 use Windwalker\Core\Http\AppRequest;
+use Windwalker\Core\Router\SystemUri;
 use Windwalker\Filesystem\Path;
 use Windwalker\Form\Field\AbstractField;
 use Windwalker\Http\Helper\HeaderHelper;
@@ -20,6 +23,7 @@ use Windwalker\Utilities\Contract\LanguageInterface;
 
 use function Windwalker\collect;
 use function Windwalker\DOM\h;
+use function Windwalker\tid;
 use function Windwalker\uid;
 
 /**
@@ -29,7 +33,7 @@ use function Windwalker\uid;
  */
 class FormFile extends AbstractFormType
 {
-    public function __construct(protected FileUploadService $fileUploadService)
+    public function __construct(protected FileUploadService $fileUploadService, protected SystemUri $uri)
     {
     }
 
@@ -94,7 +98,7 @@ class FormFile extends AbstractFormType
         return $field;
     }
 
-    public function prepareStore(array $data, AppRequest $request, string $ns): array
+    public function prepareStore(AppRequest $request, Formkit $formkit, array $data, string $ns): array
     {
         $files = $request->file($ns)[$this->getLabel()];
 
@@ -103,17 +107,17 @@ class FormFile extends AbstractFormType
         if ($this->data->max > 1) {
             /** @var UploadedFileInterface $file */
             foreach ($files as $i => $file) {
-                $data[$this->getLabel()][] = $this->upload($file);
+                $data[$this->getLabel()][] = $this->upload($formkit, $file);
             }
         } else {
             /** @var UploadedFileInterface $files */
-            $data[$this->getLabel()][] = $this->upload($files);
+            $data[$this->getLabel()][] = $this->upload($formkit, $files);
         }
 
         return $data;
     }
 
-    protected function upload(UploadedFileInterface $file): string
+    protected function upload(Formkit $formkit, UploadedFileInterface $file): string
     {
         $filename = $file->getClientFilename();
 
@@ -123,7 +127,7 @@ class FormFile extends AbstractFormType
 
         $result = $this->fileUploadService->handleFileIfUploaded(
             $file,
-            'formkit/files/{year}/{month}/{day}/' . uid('file') . '.{ext}',
+            'formkit/' . $formkit->getId() . '/' . tid('file') . '.{ext}',
             [
                 'options' => [
                     'ContentType' => $file->getClientMediaType(),
@@ -172,12 +176,26 @@ class FormFile extends AbstractFormType
 
     public function prepareExportData(array $content): array
     {
+        $data = [];
+
         if ($this->data->max > 1) {
             foreach (range(1, $this->data->max) as $i => $file) {
                 $data[$this->getLabel() . '_' . ($i + 1)] = $content[$this->getLabel()][$i] ?? '';
             }
         } else {
             $data[$this->getLabel()] = parent::prepareExportData($content);
+        }
+
+        $storage = $this->fileUploadService->getStorage();
+
+        if ($storage instanceof LocalStorage) {
+            foreach ($data as $i => $value) {
+                if (!$value) {
+                    continue;
+                }
+
+                $data[$i] = $this->uri->root($value);
+            }
         }
 
         return $data;
