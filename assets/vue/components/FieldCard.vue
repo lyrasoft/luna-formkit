@@ -110,7 +110,7 @@ const fieldForm = computed(() => {
             必填
           </BFormCheckbox>
         </div>
-        <div class="">
+        <div class="d-flex gap-2">
           <button type="button" class="btn btn-outline-secondary btn-sm"
             @click.stop="copy(item)">
             <span class="far fa-copy"></span>

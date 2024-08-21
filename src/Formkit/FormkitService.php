@@ -111,7 +111,6 @@ class FormkitService
         if (!$item instanceof Formkit) {
             $item = $this->orm->mustFindOne(Formkit::class, $item);
         }
-        $this->checkAvailable($item);
 
         $fields = collect($item->getContent());
         $formFactory = $this->app->retrieve(FormFactory::class);

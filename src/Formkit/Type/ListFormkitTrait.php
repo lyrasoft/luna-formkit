@@ -29,7 +29,7 @@ trait ListFormkitTrait
     {
         $field->option(
             $this->getOptionText($field),
-            $this->trans('formkit.option.other'),
+            '其他',
             ['id' => uid('option'), 'class' => 'c-other-option']
         );
     }
@@ -40,7 +40,7 @@ trait ListFormkitTrait
             'div',
             ['class' => 'd-flex'],
             [
-                h('div', ['class' => 'me-2 text-nowrap'], $this->trans('formkit.option.other')),
+                h('div', ['class' => 'me-2 text-nowrap'], '其他'),
                 $this->getOtherInput($field),
             ]
         );

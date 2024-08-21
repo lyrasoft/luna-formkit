@@ -88,19 +88,19 @@ $uniScript->addRoute(
         <div class="py-5 text-center">
             <button type="reset" class="btn btn-lg btn-outline-secondary"
                 style="min-width: 150px">
-                @lang('formkit.button.clear')
+                清除
             </button>
             <button type="button" class="btn btn-lg btn-primary"
                 data-task="submit"
                 style="min-width: 250px"
                 data-dos
             >
-                @lang('formkit.button.submit')
+                送出
             </button>
         </div>
 
         <div class="d-none">
-            @formToken()
+            <x-csrf></x-csrf>
         </div>
     </form>
 </div>

@@ -1,1 +1,35 @@
-System.register(["@main"],(function(e,t){"use strict";t&&t.id;return e("default",(function(e,t){const{defineComponent:n}=t;return n({name:"FormCheckboxes",template:'\n      <div class="mt-3">\n        <SelectOptions v-model="item" icon="far fa-square" other />\n      </div>\n    ',props:{...useFormkitField.props},setup:(e,t)=>({...useFormkitField(e,t)})})})),{setters:[function(e){}],execute:function(){}}}));
+System.register(["@main"], function (exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
+    function default_1(app, vue) {
+        const { defineComponent } = vue;
+        return defineComponent({
+            name: 'FormCheckboxes',
+            template: `
+      <div class="mt-3">
+        <SelectOptions v-model="item" icon="far fa-square" other />
+      </div>
+    `,
+            props: {
+                ...useFormkitField.props
+            },
+            setup(props, ctx) {
+                const mixin = useFormkitField(props, ctx);
+                return {
+                    ...mixin
+                };
+            },
+        });
+    }
+    exports_1("default", default_1);
+    return {
+        setters: [
+            function (_1) {
+            }
+        ],
+        execute: function () {
+        }
+    };
+});
+
+//# sourceMappingURL=form-checkboxes.js.map

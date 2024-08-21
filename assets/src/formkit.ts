@@ -6,7 +6,6 @@ u.formValidation();
 class FormkitHandler {
   constructor(protected el: HTMLElement, protected uid: string) {
     this.registerValidation();
-    this.replaceIds();
     this.autoCheckOther();
   }
 
@@ -25,14 +24,6 @@ class FormkitHandler {
       }, 500);
     });
 
-    // 移除前次驗證的資訊
-    // grids.find('.invalid-tooltip').remove();
-    //
-    // grids.each((i, el) => {
-
-    // });
-    //
-
     form.addEventListener('submit', (e) => {
       let invalid = 0;
       let scrollTarget: HTMLElement | undefined = undefined;
@@ -40,7 +31,7 @@ class FormkitHandler {
 
       // 驗證選擇列表
       // -----------------------------
-      const fields = $form.querySelectorAll<HTMLDivElement>('.input-list-container[required]');
+      // const fields = $form.querySelectorAll<HTMLDivElement>('.input-list-container[required]');
 
       // 驗證矩陣
       // -----------------------------
@@ -102,25 +93,17 @@ class FormkitHandler {
     });
   }
 
-  replaceIds() {
-    const fields = this.el.querySelectorAll<HTMLElement>('.c-formkit-field');
-
-    for (const field of fields) {
-      const id = 'input-' + field.dataset.uid;
-
-      // $this.find('> [data-form-group]')
-      //   .attr('id', id + '-control')
-      //   .find('> label')
-      //   .attr('id', id + '-label')
-      //   .attr('for', id);
-    }
-  }
-
   autoCheckOther() {
-    // this.$element.find('.c-other-input').on('input', (e) => {
-    //   const $this = $(e.currentTarget);
-    //   $this.closest('.radio, .checkbox').find('.c-other-option').prop('checked', true);
-    // });
+    u.selectAll<HTMLInputElement>('.js-other-text', (el) => {
+      el.addEventListener('input', () => {
+        const option = el.closest('[data-input-option]')
+          ?.querySelector<HTMLInputElement>('[data-radio-item-input], [data-checkbox-item-input]');
+
+        if (option) {
+          option.checked = true;
+        }
+      });
+    });
   }
 }
 

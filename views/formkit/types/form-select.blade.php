@@ -49,7 +49,7 @@ if ($field->hasOther()) {
 ?>
 
 <div class="l-form-select-wrapper">
-    <x-input :field="$formField" :options="[]"></x-input>
+    <x-field :field="$formField" :options="[]"></x-field>
 
     @if ($field->hasOther())
         <div class="mt-2">
