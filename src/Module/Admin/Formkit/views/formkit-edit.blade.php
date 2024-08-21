@@ -119,11 +119,11 @@ $uniScript->data(
                                 <label class="form-label">嵌入碼</label>
                                 <div class="input-group ">
                                     <input type="text" class="form-control" disabled
-                                        value="[formkit id={{ $item->getId() }} /]"
+                                        value="[formkit id={{ $item->getId() }}]"
                                     />
                                     <button type="button"
                                         class="btn btn-outline-info"
-                                        onclick="navigator.clipboard.writeText('[formkit id={{ $item->getId() }} /]')"
+                                        onclick="navigator.clipboard.writeText('[formkit id={{ $item->getId() }}]')"
                                     >
                                         <i class="far fa-copy"></i>
                                         複製
