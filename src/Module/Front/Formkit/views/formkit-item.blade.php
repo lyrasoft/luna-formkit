@@ -42,7 +42,7 @@ $formkitService = $app->retrieve(FormkitService::class);
                 <h2>{{ $item->getTitle() }}</h2>
             </header>
 
-            {!! $formkitService->render($item) !!}
+            {!! $formkitService->render($item, ['force' => true]) !!}
         </div>
     </div>
 @stop

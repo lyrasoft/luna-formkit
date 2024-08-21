@@ -89,8 +89,9 @@ class FormkitService
         $id = $item->getId();
 
         $formkitService = $this;
+        $force = $options['force'] ?? false;
 
-        if (!$this->isAvailable($item)) {
+        if (!$force && !$this->isAvailable($item)) {
             return $this->rendererService->render(
                 'formkit.formkit-unpublished',
                 compact(
