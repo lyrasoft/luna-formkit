@@ -71,40 +71,6 @@ class FormGridBoxScale extends FormGridRadioScale
         return '矩陣勾選量表';
     }
 
-    /**
-     * prepareStore
-     *
-     * @param  AppRequest  $request
-     * @param  Formkit     $formkit
-     * @param array        $data
-     * @param string       $ns
-     *
-     * @return  array
-     *
-     * @since  __DEPLOY_VERSION__
-     */
-    public function prepareStore(AppRequest $request, Formkit $formkit, array $data, string $ns): array
-    {
-        $rows = $data[$this->getLabel()] ?? [];
-
-        $rows = array_map(function ($v) {
-            return implode(',', $v);
-        }, $rows);
-        
-        $new = Arr::flatten(
-            [
-                $this->getLabel() => $rows
-            ],
-            '_'
-        );
-
-        $data = array_merge($data, $new);
-
-        unset($data[$this->getLabel()]);
-
-        return $data;
-    }
-
     public function prepareViewLabels(): array
     {
         $labels = [];

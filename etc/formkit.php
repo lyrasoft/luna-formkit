@@ -25,6 +25,19 @@ return [
             FormkitPackage::class,
         ],
 
+        'receivers' => [
+            'roles' => [
+                'superuser',
+                'admin'
+            ],
+            'cc' => [
+                //
+            ],
+            'bcc' => [
+                //
+            ],
+        ],
+
         'view' => [
             'default_extends' => 'global.body',
             'extends' => [

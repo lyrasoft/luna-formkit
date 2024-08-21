@@ -17,7 +17,8 @@
     "minimum-stability": "beta",
     "require": {
         "php": ">=8.2",
-        "lyrasoft/luna": "^2.1"
+        "lyrasoft/luna": "^2.1",
+        "phpoffice/phpspreadsheet": "^2.2"
     },
     "extra": {
         "windwalker":{

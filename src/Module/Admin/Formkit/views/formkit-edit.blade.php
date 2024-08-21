@@ -115,6 +115,21 @@ $uniScript->data(
                                     </button>
                                 </div>
                             </div>
+                            <div class="form-group mb-4">
+                                <label class="form-label">嵌入碼</label>
+                                <div class="input-group ">
+                                    <input type="text" class="form-control" disabled
+                                        value="[formkit id={{ $item->getId() }} /]"
+                                    />
+                                    <button type="button"
+                                        class="btn btn-outline-info"
+                                        onclick="navigator.clipboard.writeText('[formkit id={{ $item->getId() }} /]')"
+                                    >
+                                        <i class="far fa-copy"></i>
+                                        複製
+                                    </button>
+                                </div>
+                            </div>
                         @endif
                     </x-slot>
                 </x-fieldset>

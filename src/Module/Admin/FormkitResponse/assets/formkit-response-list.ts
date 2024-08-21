@@ -21,7 +21,7 @@ type PreviewModal = HTMLDivElement & {
 u.$ui.iframeModal().then(() => {
   const previewModal = u.selectOne<PreviewModal>('#preview-modal');
 
-  if (previewModal && location.hash && location.hash.startsWith('#contact-')) {
+  if (previewModal && location.hash && location.hash.startsWith('#res-')) {
     const hash = location.hash;
     let route = previewModal.dataset.route!;
 

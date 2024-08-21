@@ -5,24 +5,30 @@ declare(strict_types=1);
 namespace Lyrasoft\Formkit\Formkit;
 
 use Lyrasoft\Formkit\Entity\Formkit;
+use Lyrasoft\Formkit\Entity\FormkitResponse;
 use Lyrasoft\Formkit\Formkit\Exception\FormkitUnpublishedException;
 use Lyrasoft\Formkit\Formkit\Type\AbstractFormType;
 use Lyrasoft\Formkit\FormkitPackage;
+use Lyrasoft\Luna\Field\CaptchaField;
+use Thunder\Shortcode\Event\ReplaceShortcodesEvent;
+use Thunder\Shortcode\Events;
+use Thunder\Shortcode\Shortcode\ReplacedShortcode;
+use Thunder\Shortcode\Shortcode\ShortcodeInterface;
+use Thunder\Shortcode\ShortcodeFacade;
 use Windwalker\Core\Application\ApplicationInterface;
 use Windwalker\Core\Form\FormFactory;
+use Windwalker\Core\Mailer\MailerInterface;
+use Windwalker\Core\Mailer\MailMessage;
 use Windwalker\Core\Renderer\RendererService;
-use Windwalker\Core\Router\SystemUri;
 use Windwalker\Data\Collection;
-use Windwalker\DI\Attributes\Service;
 use Windwalker\Form\Field\AbstractField;
 use Windwalker\Form\Form;
 use Windwalker\ORM\ORM;
-use Windwalker\Renderer\CompositeRenderer;
 use Windwalker\Utilities\Cache\InstanceCacheTrait;
-
-use Windwalker\Utilities\Iterator\PriorityQueue;
+use Windwalker\Utilities\Str;
 
 use function Windwalker\collect;
+use function Windwalker\now;
 
 class FormkitService
 {
@@ -74,17 +80,29 @@ class FormkitService
     public function render(int|Formkit $item, array $options = []): string
     {
         /**
-         * @var Formkit    $item
+         * @var Formkit $item
          * @var Collection $fields
-         * @var Form       $form
+         * @var Form $form
          */
         [$item, $fields, $form] = $this->getFormkitMeta($item, $options);
 
-        $this->checkAvailable($item);
+        $id = $item->getId();
 
         $formkitService = $this;
 
-        $id = $item->getId();
+        if (!$this->isAvailable($item)) {
+            return $this->rendererService->render(
+                'formkit.formkit-unpublished',
+                compact(
+                    'id',
+                    'options',
+                    'fields',
+                    'item',
+                    'formkitService',
+                    'form'
+                )
+            );
+        }
 
         return $this->rendererService->render(
             'formkit.formkit',
@@ -137,9 +155,13 @@ class FormkitService
             }
         );
 
-        // $form->add('catpcha', CaptchaField::class)
-        //     ->autoValidate(true)
-        //     ->jsVerify(true);
+        $captcha = (bool) ($item->getParams()['captcha'] ?? false);
+
+        if ($captcha) {
+            $form->add('captcha', CaptchaField::class)
+                ->autoValidate(true)
+                ->jsVerify(true);
+        }
 
         return [$item, $fields, $form];
     }
@@ -161,30 +183,6 @@ class FormkitService
         return $this->getFormkitMeta($id, $options)[1];
     }
 
-    /**
-     * getFormattedContent
-     *
-     * @param  int|Formkit  $item
-     * @param  array        $rawContent
-     *
-     * @return  array
-     *
-     * @since  __DEPLOY_VERSION__
-     */
-    public function getFormattedContent(int|Formkit $item, array $rawContent): array
-    {
-        /** @var Collection|AbstractFormType[] $fields */
-        $fields = $this->getFields($item);
-
-        $content = [];
-
-        foreach ($fields as $field) {
-            $content = $field->prepareExportData($rawContent);
-        }
-
-        return $content;
-    }
-
     public function checkAvailable(Formkit $item): void
     {
         // Check published
@@ -202,5 +200,108 @@ class FormkitService
         if ($down !== null && $down->isPast()) {
             throw new FormkitUnpublishedException('Formkit end publish');
         }
+    }
+
+    public function isAvailable(Formkit $item): bool
+    {
+        try {
+            $this->checkAvailable($item);
+        } catch (FormkitUnpublishedException) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function parseShortCode(string $html): string
+    {
+        return $this->createShortCodeProcessor()->process($html);
+    }
+
+    public function createShortCodeProcessor(): ShortcodeFacade
+    {
+        $shortcode = new ShortcodeFacade();
+
+        $shortcode->addHandler(
+            'formkit',
+            function (ShortcodeInterface $shortcode) {
+                $params = $shortcode->getParameters();
+                $id = $params['id'];
+                $alias = $params['alias'];
+
+                if ($id) {
+                    $item = $this->orm->findOne(Formkit::class, $id);
+                } elseif ($alias) {
+                    $item = $this->orm->findOne(Formkit::class, compact('alias'));
+                } else {
+                    return '';
+                }
+
+                if (!$item) {
+                    return '';
+                }
+
+                return $this->render($item, $params);
+            }
+        );
+
+        $shortcode->addEventHandler(Events::REPLACE_SHORTCODES, $this->replaceArounds(...));
+
+        return $shortcode;
+    }
+
+    protected function replaceArounds(ReplaceShortcodesEvent $event): void
+    {
+        $event->setResult(
+            array_reduce(
+                array_reverse($event->getReplacements()),
+                static function ($fullText, ReplacedShortcode $r) {
+                    $offset = $r->getOffset();
+                    $length = mb_strlen($r->getText());
+
+                    $prefix = mb_substr($fullText, 0, $offset);
+                    $postfix = mb_substr($fullText, $offset + $length);
+
+                    $prefix = Str::removeRight(rtrim($prefix), '<p>');
+                    $postfix = Str::removeLeft(ltrim($postfix), '</p>');
+
+                    return $prefix . $r->getReplacement() . $postfix;
+                },
+                $event->getText()
+            )
+        );
+    }
+
+    public function createReceiverMailMessage(Formkit $item, FormkitResponse $res, ?string $subject = null, ?string $layout = null): MailMessage
+    {
+        $subject ??= sprintf(
+            '[表單提交 #%s] %s - %s',
+            $res->getId(),
+            $item->getTitle(),
+            now('Y-m-d H:i:s')
+        );
+
+        $mailer = $this->app->retrieve(MailerInterface::class);
+
+        $message = $mailer->createMessage($subject)
+            ->renderBody(
+                $layout ?? 'mail.formkit-receiver-mail',
+                [
+                    'item' => $item,
+                    'res' => $res,
+                ]
+            );
+
+        $receivers = (array) $this->formkit->config('receivers');
+
+        foreach ($receivers['cc'] ?? [] as $address) {
+            $message->cc($address);
+        }
+
+        foreach ($receivers['bcc'] ?? [] as $address) {
+            $message->bcc($address);
+        }
+
+        return $message;
     }
 }

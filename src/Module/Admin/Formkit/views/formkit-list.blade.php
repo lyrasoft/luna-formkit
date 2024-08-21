@@ -83,12 +83,6 @@ $workflow = $app->service(BasicStateWorkflow::class);
                         觀看提交
                     </th>
 
-                    <th class="text-nowrap" style="width: 5%">
-                        <x-sort field="formkit.modified">
-                            @lang('unicorn.field.modified')
-                        </x-sort>
-                    </th>
-
                     {{-- Delete --}}
                     <th style="width: 1%" class="text-nowrap">
                         @lang('unicorn.field.delete')
@@ -161,10 +155,6 @@ $workflow = $app->service(BasicStateWorkflow::class);
                                     ({{ $item->res_count }})
                                 @endif
                             </a>
-                        </td>
-
-                        <td class="text-nowrap">
-                            {{ $chronos->toLocalFormat($item->getModified()) }}
                         </td>
 
                         {{-- Delete --}}

@@ -21,6 +21,7 @@ use Lyrasoft\Formkit\Entity\FormkitResponse;
 use Lyrasoft\Formkit\Formkit\FormkitService;
 use Lyrasoft\Formkit\Formkit\Type\AbstractFormType;
 use Lyrasoft\Formkit\Module\Admin\FormkitResponse\FormkitResponseEditView;
+use Lyrasoft\Luna\User\UserService;
 use Windwalker\Core\Application\AppContext;
 use Windwalker\Core\Asset\AssetService;
 use Windwalker\Core\DateTime\ChronosService;
@@ -35,12 +36,15 @@ use Windwalker\Core\Router\SystemUri;
  */
 
 $formkitService = $app->retrieve(FormkitService::class);
+$userService = $app->retrieve(UserService::class);
 
 [, $fields] = $formkitService->getFormkitMeta($formkit);
 
+$user = $userService->load(['id' => $item->getCreatedBy()]);
 $content = $item->getContent();
+
 ?>
-<table class="table table-striped">
+<table class="table table-striped c-preview-table">
 
     {{-- ID --}}
     <tr>
@@ -74,25 +78,9 @@ $content = $item->getContent();
         </tr>
     @endif
 
-    {{-- User Info --}}
-    <tr>
-        <th >
-            裝置資訊
-        </th>
-        <td>
-            <div>
-                {{ $item->getIp() }}
-            </div>
-
-            <div>
-                {{ $item->getUa() }}
-            </div>
-        </td>
-    </tr>
-
     @foreach ($fields as $field)
         @php
-        $values = array_values($field->prepareViewData($content));
+            $values = array_values($field->prepareViewData($content));
         @endphp
         @foreach ($field->prepareViewLabels() as $i => $label)
             <tr>
@@ -105,5 +93,21 @@ $content = $item->getContent();
             </tr>
         @endforeach
     @endforeach
+
+    {{-- User Info --}}
+    <tr>
+        <th>
+            裝置資訊
+        </th>
+        <td>
+            <div>
+                {{ $item->getIp() }}
+            </div>
+
+            <div>
+                {{ $item->getUa() }}
+            </div>
+        </td>
+    </tr>
 </table>
 

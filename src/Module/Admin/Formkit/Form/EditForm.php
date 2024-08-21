@@ -77,6 +77,12 @@ class EditForm
             ->color('primary')
             ->defaultValue('0');
 
+        $form->add('params/captcha', SwitcherField::class)
+            ->label('驗證碼')
+            ->circle(true)
+            ->color('dark')
+            ->defaultValue('0');
+
         $form->add('publish_up', CalendarField::class)
             ->label('開始發佈');
 

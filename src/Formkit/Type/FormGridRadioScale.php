@@ -88,34 +88,6 @@ class FormGridRadioScale extends AbstractFormType
         );
     }
 
-    /**
-     * prepareStore
-     *
-     * @param  AppRequest  $request
-     * @param  Formkit     $formkit
-     * @param array        $data
-     * @param string       $ns
-     *
-     * @return  array
-     *
-     * @since  __DEPLOY_VERSION__
-     */
-    public function prepareStore(AppRequest $request, Formkit $formkit, array $data, string $ns): array
-    {
-        $new = Arr::flatten(
-            [
-                $this->getLabel() => $data[$this->getLabel()] ?? []
-            ],
-            '_'
-        );
-
-        $data = array_merge($data, $new);
-
-        unset($data[$this->getLabel()]);
-
-        return $data;
-    }
-
     public function prepareViewLabels(): array
     {
         $labels = [];

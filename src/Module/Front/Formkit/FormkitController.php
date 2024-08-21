@@ -4,18 +4,28 @@ declare(strict_types=1);
 
 namespace Lyrasoft\Formkit\Module\Front\Formkit;
 
+use Lyrasoft\Contact\Event\ContactAfterSendEvent;
 use Lyrasoft\Formkit\Entity\Formkit;
+use Lyrasoft\Formkit\Event\FormkitBeforeSendEvent;
 use Lyrasoft\Formkit\Formkit\FormkitService;
 use Lyrasoft\Formkit\Formkit\Type\AbstractFormType;
 use Lyrasoft\Formkit\Entity\FormkitResponse;
 use Lyrasoft\Formkit\Enum\ResState;
+use Lyrasoft\Formkit\FormkitPackage;
+use Lyrasoft\Luna\Access\AccessService;
+use Lyrasoft\Luna\Entity\User;
+use Lyrasoft\Luna\Entity\UserRoleMap;
+use Lyrasoft\Luna\Field\CaptchaField;
+use Lyrasoft\Luna\Repository\UserRepository;
 use Lyrasoft\Luna\User\UserService;
 use Windwalker\Core\Application\AppContext;
 use Windwalker\Core\Attributes\Controller;
 use Windwalker\Core\Http\Browser;
 use Windwalker\Core\Http\RequestAssert;
 use Windwalker\Core\Utilities\Base64Url;
+use Windwalker\DI\Attributes\Autowire;
 use Windwalker\ORM\ORM;
+use Windwalker\Query\Query;
 use Windwalker\Uri\Uri;
 use Windwalker\Uri\UriHelper;
 
@@ -41,6 +51,14 @@ class FormkitController
         RequestAssert::assert($id, 'No ID');
 
         [$formkit, $fields, $form] = $formkitService->getFormkitMeta($id);
+
+        $captcha = (bool) ($formkit->getParams()['captcha'] ?? false);
+
+        if ($captcha) {
+            /** @var CaptchaField $captchaField */
+            $captchaField = $form['captcha'];
+            $captchaField->validate($content['captcha'] ?? '');
+        }
 
         // $form->validate($content);
         $appRequest = $app->getAppRequest();
@@ -89,10 +107,67 @@ class FormkitController
     protected function sendAdminMail(
         Formkit $item,
         FormkitResponse $res,
+        AppContext $app,
+        FormkitPackage $formkitPackage,
         FormkitService $formkitService,
-    ) {
-        $fields = $formkitService->getFormattedContent($item, $res->getContent());
+        #[Autowire]
+        UserRepository $userRepository,
+    ): void {
+        $message = $formkitService->createReceiverMailMessage($item, $res);
 
-        // Todo: Send admin mail
+        $roles = $formkitPackage->config('receivers.roles') ?? ['superuser', 'manager'];
+
+        /** @var User[] $users */
+        $users = $userRepository->getListSelector()
+            ->where('user.receive_mail', 1)
+            ->where('user.enabled', 1)
+            ->where('user.verified', 1)
+            ->modifyQuery(
+                fn(Query $query) => $query->where(
+                    $query->expr(
+                        'EXISTS()',
+                        $query->createSubQuery()
+                            ->select('*')
+                            ->from(UserRoleMap::class)
+                            ->whereRaw('user_id = user.id')
+                            ->whereRaw('role_id IN(%r)', implode(',', $query->quote($roles)))
+                    )
+                )
+            )
+            ->limit(30)
+            ->all(User::class);
+
+        $sendEvent = $app->emit(
+            FormkitBeforeSendEvent::class,
+            compact(
+                'message',
+                'item',
+                'res',
+                'users',
+            )
+        );
+
+        $users = $sendEvent->getUsers();
+        $message = $sendEvent->getMessage();
+        $item = $sendEvent->getItem();
+        $res = $sendEvent->getRes();
+
+        foreach ($users as $user) {
+            $message->bcc($user->getEmail());
+        }
+
+        if ($message->getTo() || $message->getCc() || $message->getBcc()) {
+            $message->send();
+        }
+
+        $app->emit(
+            ContactAfterSendEvent::class,
+            compact(
+                'message',
+                'item',
+                'res',
+                'users',
+            )
+        );
     }
 }

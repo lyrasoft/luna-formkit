@@ -60,6 +60,8 @@ $uniScript->addRoute(
         ->full()
 );
 
+$captcha = (bool) ($item->getParams()['captcha'] ?? false);
+
 ?>
 <div id="{{ $formId }}-wrapper" class="l-formkit-wrapper mb-5 mt-5" data-role="formkit"
     uni-formkit="{{ $uid }}">
@@ -84,6 +86,12 @@ $uniScript->addRoute(
                 @include($formkitService->getFieldLayout($field))
             </div>
         @endforeach
+
+        @if ($captcha)
+            <div class="l-captcha-wrapper mx-auto mt-5" style="max-width: 500px">
+                <x-field :field="$form['captcha']" class=""></x-field>
+            </div>
+        @endif
 
         <div class="py-5 text-center">
             <button type="reset" class="btn btn-lg btn-outline-secondary"

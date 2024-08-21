@@ -118,23 +118,6 @@ class FormCheckboxes extends FormSelect
             });
     }
 
-    /**
-     * prepareStore
-     *
-     * @param  AppRequest  $request
-     * @param  Formkit     $formkit
-     * @param array        $data
-     * @param string       $ns
-     *
-     * @return  array
-     *
-     * @since  __DEPLOY_VERSION__
-     */
-    public function prepareStore(AppRequest $request, Formkit $formkit, array $data, string $ns): array
-    {
-        return $data;
-    }
-
     public function prepareViewLabels(): array
     {
         $labels = [$this->getLabel()];
