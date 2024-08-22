@@ -53,7 +53,8 @@ const fieldForm = computed(() => {
 </script>
 
 <template>
-  <div class="card border-left border-primary"
+  <div class="card border-left border-primary c-field-card"
+    :class="`c-field-card--${item.type}`"
     :style="[ isFocused ? 'border-left-width: 8px !important;' : 'border-left-width: 3px !important;' ]"
     @click="$emit('focus')">
     <div class="h-handle text-center position-absolute w-100" style="top: 0; cursor: move;">

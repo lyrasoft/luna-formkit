@@ -9,17 +9,17 @@ export default function (app: any, vue: typeof Vue) {
     template: `
       <div class="mt-3">
         <div class="row gy-3">
-          <div class="col-lg-4">
+          <div class="col-lg-4 c-input c-input--min-max">
             <label :for="getId('min')" class="mr-2">數值</label>
             <div class="d-flex gap-2 align-items-center">
-              <select :id="getId('min')" v-model="item.min" class="form-select">
+              <select :id="getId('min')" v-model="item.min" class="form-select c-input c-input--min">
                 <option value="0">0</option>
                 <option value="1">1</option>
               </select>
 
               <span class="mx-2">到</span>
 
-              <select :id="getId('max')" v-model="item.max" class="form-select">
+              <select :id="getId('max')" v-model="item.max" class="form-select c-input c-input--max">
                 <option value="2">2</option>
                 <option value="3">3</option>
                 <option value="4">4</option>
@@ -33,11 +33,11 @@ export default function (app: any, vue: typeof Vue) {
             </div>
           </div>
           
-          <div class="col-lg-2">
+          <div class="col-lg-2 c-input c-input--start">
             <label :for="getId('start')" class="mr-2">最小標籤</label>
             <input :id="getId('start')" type="text" v-model="item.start" class="form-control">
           </div>
-          <div class="col-lg-2">
+          <div class="col-lg-2 c-input c-input--end">
             <label :for="getId('end')" class="mr-2">最大標籤</label>
             <input :id="getId('end')" type="text" v-model="item.end" class="form-control">
           </div>

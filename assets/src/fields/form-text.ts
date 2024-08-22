@@ -7,10 +7,13 @@ export default function (app: any, vue: typeof Vue) {
   return defineComponent({
     name: 'FormText',
     template: `
-      <div class="mt-3 row align-items-center">
+      <div class="mt-3 row align-items-center l-form-text-options"
+        :class="'l-form-text-options--' + item.subtype">
         <!-- Subtype -->
-        <div class="col-lg-2">
-          <label :for="getId('subtype')" class="form-label text-nowrap">限定格式</label>
+        <div class="col-lg-2 c-input c-input--subtype">
+          <label :for="getId('subtype')" class="form-label text-nowrap">
+            限定格式
+          </label>
           <select :id="getId('subtype')" v-model="item.subtype" class="form-select">
             <option value="text">一般文字</option>
             <option value="number">數字</option>
@@ -21,12 +24,12 @@ export default function (app: any, vue: typeof Vue) {
         </div>
 
         <!-- Pattern -->
-        <div class="col-lg-4">
-          <label :for="getId('pattern')" class="form-label text-nowrap">
-            字串檢查語法 (Regex)
-          </label>
-          <input :id="getId('pattern')" type="text" class="form-control" v-model="item.pattern" />
-        </div>
+        <!--<div class="col-lg-4">-->
+        <!--  <label :for="getId('pattern')" class="form-label text-nowrap">-->
+        <!--    字串檢查語法 (Regex)-->
+        <!--  </label>-->
+        <!--  <input :id="getId('pattern')" type="text" class="form-control" v-model="item.pattern" />-->
+        <!--</div>-->
       </div>
     `,
     props: {

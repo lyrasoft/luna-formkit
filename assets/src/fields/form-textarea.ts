@@ -8,7 +8,7 @@ export default function (app: any, vue: typeof Vue) {
     name: 'FormTextarea',
     template: `
       <div class="mt-3 row row-cols-lg-auto align-items-center">
-        <div class="col-lg-2">
+        <div class="col-lg-2 c-input c-input--height">
           <label :for="getId('height')" class="form-label">高度</label>
           <div :id="getId('height')" class="input-group">
             <input type="number" class="form-control" v-model="item.height"
