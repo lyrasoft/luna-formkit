@@ -183,7 +183,7 @@ class FormFile extends AbstractFormType
                 $data[$this->getLabel() . '_' . ($i + 1)] = $content[$this->getLabel()][$i] ?? '';
             }
         } else {
-            $data[$this->getLabel()] = parent::prepareExportData($content);
+            $data = parent::prepareExportData($content);
         }
 
         $storage = $this->fileUploadService->getStorage();
