@@ -108,7 +108,7 @@ class FormSelect extends AbstractFormType
                         ''
                     );
 
-                    foreach ($this->data->options as $opt) {
+                    foreach ($this->getOptions() as $opt) {
                         $field->option($opt['text'], $opt['text'], ['id' => uid('option')]);
                     }
                 }

@@ -112,7 +112,7 @@ class FormCheckboxes extends FormSelect
             ->label($this->getLabel())
             ->setName($this->getLabel())
             ->register(function (CheckboxesField $field) {
-                foreach ($this->data->options as $opt) {
+                foreach ($this->getOptions() as $opt) {
                     $field->option($opt['text'], $opt['text'], ['id' => uid('option', true)]);
                 }
             });

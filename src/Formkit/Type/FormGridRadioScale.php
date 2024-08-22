@@ -92,7 +92,7 @@ class FormGridRadioScale extends AbstractFormType
     {
         $labels = [];
 
-        foreach ($this->data->rows as $i => $row) {
+        foreach ($this->getRows() as $i => $row) {
             $labels[] = $this->getLabel() . ': ' . $row['text'];
         }
 
@@ -103,7 +103,7 @@ class FormGridRadioScale extends AbstractFormType
     {
         $data = [];
 
-        foreach ($this->data->rows as $i => $row) {
+        foreach ($this->getRows() as $i => $row) {
             $data[] = $content[$this->getLabel()][$row['text']] ?? '';
         }
 
@@ -114,7 +114,7 @@ class FormGridRadioScale extends AbstractFormType
     {
         $labels = [];
 
-        foreach ($this->data->rows as $i => $row) {
+        foreach ($this->getRows() as $i => $row) {
             $label = $this->getLabel() . '_' . $row['text'];
 
             $labels[$label] = $label;
@@ -127,7 +127,7 @@ class FormGridRadioScale extends AbstractFormType
     {
         $data = [];
 
-        foreach ($this->data->rows as $i => $row) {
+        foreach ($this->getRows() as $i => $row) {
             $label = $this->getLabel() . '_' . $row['text'];
 
             $value = $content[$this->getLabel()][$row['text']] ?? '';
@@ -136,5 +136,13 @@ class FormGridRadioScale extends AbstractFormType
         }
 
         return $data;
+    }
+
+    /**
+     * @return  mixed
+     */
+    protected function getRows(): mixed
+    {
+        return (array) $this->data->rows;
     }
 }

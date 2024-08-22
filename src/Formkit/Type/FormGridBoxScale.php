@@ -75,7 +75,7 @@ class FormGridBoxScale extends FormGridRadioScale
     {
         $labels = [];
 
-        foreach ($this->data->rows as $i => $row) {
+        foreach ($this->getRows() as $i => $row) {
             $labels[] = $this->getLabel() . '_' . $row['text'];
         }
 
@@ -86,7 +86,7 @@ class FormGridBoxScale extends FormGridRadioScale
     {
         $data = [];
 
-        foreach ($this->data->rows as $i => $row) {
+        foreach ($this->getRows() as $i => $row) {
             $selected = $content[$this->getLabel()][$row['text']] ?? [];
 
             $selected = array_map(
@@ -104,10 +104,10 @@ class FormGridBoxScale extends FormGridRadioScale
     {
         $labels = [];
 
-        foreach ($this->data->rows as $i => $row) {
+        foreach ($this->getRows() as $i => $row) {
             $label = $this->getLabel() . '_' . $row['text'];
 
-            foreach ($this->data->columns as $c => $column) {
+            foreach ($this->getColumns() as $c => $column) {
                 $colLabel = $label . '_' . $column['text'];
 
                 $labels[$colLabel] = $colLabel;
@@ -121,12 +121,12 @@ class FormGridBoxScale extends FormGridRadioScale
     {
         $data = [];
 
-        foreach ($this->data->rows as $i => $row) {
+        foreach ($this->getRows() as $i => $row) {
             $label = $this->getLabel() . '_' . $row['text'];
 
             $values = $content[$this->getLabel()][$row['text']] ?? [];
 
-            foreach ($this->data->columns as $c => $column) {
+            foreach ($this->getColumns() as $c => $column) {
                 $colLabel = $label . '_' . $column['text'];
 
                 $data[$colLabel] = (int) in_array($column['text'], $values);
@@ -134,5 +134,21 @@ class FormGridBoxScale extends FormGridRadioScale
         }
 
         return $data;
+    }
+
+    /**
+     * @return  array
+     */
+    protected function getRows(): array
+    {
+        return (array) $this->data->rows;
+    }
+
+    /**
+     * @return  array
+     */
+    protected function getColumns(): array
+    {
+        return (array) $this->data->columns;
     }
 }

@@ -100,7 +100,7 @@ class FormRadio extends FormSelect
         return (new RadioField($this->getLabel(), $this->getLabel()))
             ->register(
                 function (RadioField $field) {
-                    foreach ($this->data->options as $opt) {
+                    foreach ($this->getOptions() as $opt) {
                         $field->option($opt['text'], $opt['text'], ['id' => uid('option')]);
                     }
 
