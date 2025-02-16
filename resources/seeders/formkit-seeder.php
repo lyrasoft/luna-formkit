@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Lyrasoft\Formkit\Seeder;
 
 use Lyrasoft\Formkit\Entity\Formkit;
-use Jenssegers\Agent\Agent;
 use Lyrasoft\Formkit\Entity\FormkitResponse;
 use Lyrasoft\Formkit\Enum\ResState;
 use Lyrasoft\Formkit\FormkitPackage;
 use Lyrasoft\Luna\Entity\User;
+use Windwalker\Core\Http\Browser;
 use Windwalker\Core\Seed\Seeder;
 use Windwalker\Database\DatabaseAdapter;
 use Windwalker\ORM\EntityMapper;
@@ -59,7 +59,7 @@ $seeder->import(
             $seeder->outCounting();
 
             foreach (range(1, 30) as $k) {
-                $agent = new Agent([], $faker->userAgent());
+                $agent = new Browser([], $faker->userAgent());
 
                 $res = new FormkitResponse();
                 $res->setFormkitId($item->getId());
