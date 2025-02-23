@@ -72,6 +72,7 @@ const content = computed(() => {
           <div v-for="(field, i) of fields" class="c-field" :key="field.uid"
             style="animation-duration: .3s">
             <FieldCard :is-focused="focus === field.uid"
+              class="mb-3"
               v-model="fields[i]"
               @focus="focus = field.uid"
               @copy="copy($event, i)"
