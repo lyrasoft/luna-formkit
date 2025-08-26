@@ -2,7 +2,6 @@
 
 import { prepareListItem } from '@vue/services/utilities';
 import type { FormTypeParams } from '@vue/types';
-import { remove } from 'dom7';
 
 const props = withDefaults(
   defineProps<{

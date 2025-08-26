@@ -1364,6 +1364,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@epic-web/invariant@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@epic-web/invariant@npm:1.0.0"
+  checksum: 10c0/72dbeb026e4e4eb3bc9c65739b91408ca77ab7d603a2494fa2eff3790ec22892c4caba751cffdf30f5ccf0e7ba79c1e9c96cf0a357404b9432bf1365baac23ca
+  languageName: node
+  linkType: hard
+
 "@fortawesome/fontawesome-free@npm:^6.0":
   version: 6.6.0
   resolution: "@fortawesome/fontawesome-free@npm:6.6.0::__archiveUrl=https%3A%2F%2Fnpm.fontawesome.com%2F%40fortawesome%2Ffontawesome-free%2F-%2F6.6.0%2Ffontawesome-free-6.6.0.tgz"
@@ -3306,6 +3313,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cross-env@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "cross-env@npm:10.0.0"
+  dependencies:
+    "@epic-web/invariant": "npm:^1.0.0"
+    cross-spawn: "npm:^7.0.6"
+  bin:
+    cross-env: dist/bin/cross-env.js
+    cross-env-shell: dist/bin/cross-env-shell.js
+  checksum: 10c0/d16ffc3734106577d57b6253d81ab50294623bd59f96e161033eaf99c1c308ffbaba8463c23a6c0f72e841eff467cb7007a0a551f27554fcf2bbf6598cd828f9
+  languageName: node
+  linkType: hard
+
 "cross-env@npm:^7.0.3":
   version: 7.0.3
   resolution: "cross-env@npm:7.0.3"
@@ -3327,7 +3347,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-spawn@npm:^7.0.0":
+"cross-spawn@npm:^7.0.0, cross-spawn@npm:^7.0.6":
   version: 7.0.6
   resolution: "cross-spawn@npm:7.0.6"
   dependencies:
@@ -7350,6 +7370,7 @@ __metadata:
     "@windwalker-io/unicorn": "npm:^1.1.18"
     babel-loader: "npm:^9.1.3"
     bootstrap-vue-next: "npm:^0.24.8"
+    cross-env: "npm:^10.0.0"
     css-loader: "npm:^7.1.2"
     file-loader: "npm:^6.2.0"
     postcss-loader: "npm:^8.1.1"
