@@ -127,7 +127,7 @@ class FormFile extends AbstractFormType
 
         $result = $this->fileUploadService->handleFileIfUploaded(
             $file,
-            'formkit/' . $formkit->getId() . '/' . tid('file') . '.{ext}',
+            'formkit/' . $formkit->id . '/' . tid('file') . '.{ext}',
             [
                 'options' => [
                     'ContentType' => $file->getClientMediaType(),

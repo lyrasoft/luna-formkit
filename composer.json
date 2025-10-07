@@ -16,8 +16,8 @@
     ],
     "minimum-stability": "beta",
     "require": {
-        "php": ">=8.2",
-        "lyrasoft/luna": "^2.1",
+        "php": ">=8.4.6",
+        "lyrasoft/luna": "^2.2",
         "phpoffice/phpspreadsheet": "^2.2",
         "thunderer/shortcode": "^0.7.5",
         "gregwar/captcha": "^1.2"

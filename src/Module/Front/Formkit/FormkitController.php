@@ -52,7 +52,7 @@ class FormkitController
 
         [$formkit, $fields, $form] = $formkitService->getFormkitMeta($id);
 
-        $captcha = (bool) ($formkit->getParams()['captcha'] ?? false);
+        $captcha = (bool) ($formkit->params['captcha'] ?? false);
 
         if ($captcha) {
             /** @var CaptchaField $captchaField */
@@ -69,16 +69,16 @@ class FormkitController
         }
 
         $res = new FormkitResponse();
-        $res->setFormkitId($formkit->getId());
-        $res->setState(ResState::PENDING);
-        $res->setFrom($app->getNav()->localReferrer());
-        $res->setContent($content);
-        $res->setIp($appRequest->getClientIP());
-        $res->setUa($browser->getUserAgent());
-        $res->setDevice($browser->deviceType() . '/' . ($browser->device() ?: 'PC'));
-        $res->setBrowser($browser->browser() . '/' . $browser->version($browser->browser()));
-        $res->setOs($browser->platform());
-        $res->setCreatedBy((int) $user->getId());
+        $res->formkitId = $formkit->id;
+        $res->state = ResState::PENDING;
+        $res->from = $app->getNav()->localReferrer();
+        $res->content = $content;
+        $res->ip = $appRequest->getClientIP();
+        $res->ua = $browser->getUserAgent();
+        $res->device = $browser->deviceType() . '/' . ($browser->device() ?: 'PC');
+        $res->browser = $browser->browser() . '/' . $browser->version($browser->browser());
+        $res->os = $browser->platform();
+        $res->createdBy = (int) $user->id;
 
         $orm->createOne($res);
 
@@ -153,7 +153,7 @@ class FormkitController
         $res = $sendEvent->getRes();
 
         foreach ($users as $user) {
-            $message->bcc($user->getEmail());
+            $message->bcc($user->email);
         }
 
         if ($message->getTo() || $message->getCc() || $message->getBcc()) {

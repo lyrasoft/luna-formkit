@@ -58,14 +58,14 @@ class FormkitExportService
         foreach ($items as $item) {
             $excel->addRow(
                 function (PhpSpreadsheetWriter $row) use ($fields, $chronosService, $userService, $item) {
-                    $user = $userService->load(['id' => $item->getCreatedBy()]);
+                    $user = $userService->load(['id' => $item->createdBy]);
 
-                    $row->setRowCell('id', $item->getId());
+                    $row->setRowCell('id', $item->id);
                     // $row->setRowCell('user', $user?->getName() ?: '');
-                    $row->setRowCell('time', $chronosService->toLocalFormat($item->getCreated()));
-                    $row->setRowCell('state', $item->getState()->getTitle($this->lang));
+                    $row->setRowCell('time', $chronosService->toLocalFormat($item->created));
+                    $row->setRowCell('state', $item->state->getTitle($this->lang));
 
-                    $content = $item->getContent();
+                    $content = $item->content;
 
                     /** @var AbstractFormType $field */
                     foreach ($fields as $field) {
@@ -79,7 +79,7 @@ class FormkitExportService
 
         $filename = sprintf(
             '[匯出] %s - %s.xlsx',
-            $formkit->getTitle(),
+            $formkit->title,
             now('Y-m-d-H-i-s')
         );
 

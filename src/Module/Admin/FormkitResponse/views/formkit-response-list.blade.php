@@ -117,7 +117,7 @@ $workflow = $app->service(ResponseWorkflow::class);
                     <tr>
                         {{-- Checkbox --}}
                         <td>
-                            <x-row-checkbox :row="$i" :id="$item->getId()"></x-row-checkbox>
+                            <x-row-checkbox :row="$i" :id="$item->id"></x-row-checkbox>
                         </td>
 
                         {{-- State --}}
@@ -128,14 +128,14 @@ $workflow = $app->service(ResponseWorkflow::class);
                                     button-style="width: 100%"
                                     use-states
                                     :workflow="$workflow"
-                                    :id="$item->getId()"
+                                    :id="$item->id"
                                     :value="$item->state"
                                 >
                                     <x-slot name="end">
                                         <li class="dropdown-divider"></li>
                                         <button type="button"
                                             class="dropdown-item"
-                                            @click="grid.deleteItem('{{ $item->getId() }}')"
+                                            @click="grid.deleteItem('{{ $item->id }}')"
                                             data-dos
                                         >
                                             <i class="fa-fw far fa-trash text-danger"></i>

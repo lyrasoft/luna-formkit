@@ -49,10 +49,10 @@ class FormkitItemView implements ViewModelInterface
         /** @var Formkit $item */
         $item = $this->repository->mustGetItem(compact('alias'));
 
-        if (!$this->pageService->secretVerify($item->getId(), $s)) {
+        if (!$this->pageService->secretVerify($item->id, $s)) {
             $this->formkitService->checkAvailable($item);
 
-            if (!$item->isPublic()) {
+            if (!$item->public) {
                 throw new RouteNotFoundException('Not public');
             }
         }
@@ -65,11 +65,11 @@ class FormkitItemView implements ViewModelInterface
     #[ViewMetadata]
     public function prepareMetadata(HtmlFrame $htmlFrame, Formkit $item): void
     {
-        $htmlFrame->setTitle($item->getTitle());
+        $htmlFrame->setTitle($item->title);
         $htmlFrame->setDescriptionIfNotEmpty(
-            $item->getDescription(),
+            $item->description,
             150
         );
-        $htmlFrame->setCoverImagesIfNotEmpty($item->getImage());
+        $htmlFrame->setCoverImagesIfNotEmpty($item->image);
     }
 }

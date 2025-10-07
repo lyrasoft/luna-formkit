@@ -54,7 +54,7 @@ class FormkitResponseEditView implements ViewModelInterface
         /** @var FormkitResponse $item */
         $item = $this->repository->mustGetItem($id);
 
-        $formkit = $this->orm->mustFindOne(Formkit::class, $item->getFormkitId());
+        $formkit = $this->orm->mustFindOne(Formkit::class, $item->formkitId);
 
         // Bind item for injection
         $view[FormkitResponse::class] = $item;
@@ -67,7 +67,7 @@ class FormkitResponseEditView implements ViewModelInterface
         //         ]
         //     );
 
-        $user = $this->userService->load(['id' => $item->getCreatedBy()]);
+        $user = $this->userService->load(['id' => $item->createdBy]);
 
         return compact('formkit', 'id', 'item', 'user');
     }

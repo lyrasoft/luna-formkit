@@ -1,25 +1,33 @@
-import '@main';
-
-u.$ui.bootstrap.tooltip();
+import {
+  selectOne,
+  useBs5Tooltip,
+  useDisableIfStackNotEmpty,
+  useDisableOnSubmit,
+  useFormComponent,
+  useFormValidation,
+  useIframeModal,
+  useKeepAlive,
+} from '@windwalker-io/unicorn-next';
 
 const formSelector = '#admin-form';
 
-// Init Grid
-u.grid(formSelector).initComponent();
+useBs5Tooltip();
 
-// Disable on submit
-u.$ui.disableOnSubmit(formSelector);
+useFormComponent(formSelector);
 
-// Checkbox Multi-select
-u.$ui.checkboxesMultiSelect(formSelector);
+useFormValidation().then(() => useDisableOnSubmit(formSelector));
+
+useDisableIfStackNotEmpty();
+
+useKeepAlive(location.href);
 
 type PreviewModal = HTMLDivElement & {
   open: (route: string, options: any) => void
 }
 
 // Preview
-u.$ui.iframeModal().then(() => {
-  const previewModal = u.selectOne<PreviewModal>('#preview-modal');
+useIframeModal().then(() => {
+  const previewModal = selectOne<PreviewModal>('#preview-modal');
 
   if (previewModal && location.hash && location.hash.startsWith('#res-')) {
     const hash = location.hash;

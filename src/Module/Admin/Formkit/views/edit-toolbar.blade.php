@@ -53,7 +53,7 @@ $pageService = $app->retrieve(PageService::class);
     </button>
 
     @if ($item)
-        @php($s = $pageService->genPreviewSecret($item->getId()))
+        @php($s = $pageService->genPreviewSecret($item->id))
         <a href="{{ $item->makeLink($nav)->var('s', $s) }}"
             class="btn btn-sm btn-outline-info"
             target="_blank">

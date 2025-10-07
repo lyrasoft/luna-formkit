@@ -26,6 +26,8 @@ use Windwalker\ORM\EntityInterface;
 use Windwalker\ORM\EntityTrait;
 use Windwalker\ORM\Metadata\EntityMetadata;
 
+// phpcs:disable
+// todo: remove this when phpcs supports 8.4
 #[Table('formkits', 'formkit')]
 #[\AllowDynamicProperties]
 class Formkit implements EntityInterface
@@ -33,69 +35,79 @@ class Formkit implements EntityInterface
     use EntityTrait;
 
     #[Column('id'), PK, AutoIncrement]
-    protected ?int $id = null;
+    public ?int $id = null;
 
     #[Column('title')]
-    protected string $title = '';
+    public string $title = '';
 
     #[Column('alias')]
     #[Slugify]
-    protected string $alias = '';
+    public string $alias = '';
 
     #[Column('description')]
-    protected string $description = '';
+    public string $description = '';
 
     #[Column('content')]
     #[Cast(JsonCast::class)]
-    protected array $content = [];
+    public array $content = [];
 
     #[Column('image')]
-    protected string $image = '';
+    public string $image = '';
 
     #[Column('extends')]
-    protected string $extends = '';
+    public string $extends = '';
 
     #[Column('state')]
     #[Cast('int')]
     #[Cast(BasicState::class)]
-    protected BasicState $state;
+    public BasicState $state {
+        set(BasicState|int $value) => $this->state = BasicState::wrap($value);
+    }
 
     #[Column('public')]
     #[Cast('bool', 'int')]
-    protected bool $public = false;
+    public bool $public = false;
 
     #[Column('publish_up')]
     #[CastNullable(ServerTimeCast::class)]
-    protected ?Chronos $publishUp = null;
+    public ?Chronos $publishUp = null {
+        set(\DateTimeInterface|string|null $value) => $this->publishUp = Chronos::tryWrap($value);
+    }
 
     #[Column('publish_down')]
     #[CastNullable(ServerTimeCast::class)]
-    protected ?Chronos $publishDown = null;
+    public ?Chronos $publishDown = null {
+        set(\DateTimeInterface|string|null $value) => $this->publishDown = Chronos::tryWrap($value);
+    }
 
     #[Column('created')]
     #[CastNullable(ServerTimeCast::class)]
     #[CreatedTime]
-    protected ?Chronos $created = null;
+    public ?Chronos $created = null {
+        set(\DateTimeInterface|string|null $value) => $this->created = Chronos::tryWrap($value);
+    }
 
     #[Column('modified')]
     #[CastNullable(ServerTimeCast::class)]
     #[CurrentTime]
-    protected ?Chronos $modified = null;
+    public ?Chronos $modified = null {
+        set(\DateTimeInterface|string|null $value) => $this->modified = Chronos::tryWrap($value);
+    }
 
     #[Column('created_by')]
     #[Author]
-    protected int $createdBy = 0;
+    public int $createdBy = 0;
 
     #[Column('modified_by')]
     #[Modifier]
-    protected int $modifiedBy = 0;
+    public int $modifiedBy = 0;
 
     #[Column('language')]
-    protected string $language = '';
+    public string $language = '';
 
     #[Column('params')]
     #[Cast(JsonCast::class)]
-    protected array $params = [];
+    public array $params = [];
 
     #[EntitySetup]
     public static function setup(EntityMetadata $metadata): void
@@ -105,7 +117,7 @@ class Formkit implements EntityInterface
 
     public function makeLink(Navigator $nav): RouteUri
     {
-        return $nav->to('front::formkit_item')->alias($this->getAlias());
+        return $nav->to('front::formkit_item')->alias($this->alias);
     }
 
     public function getId(): ?int

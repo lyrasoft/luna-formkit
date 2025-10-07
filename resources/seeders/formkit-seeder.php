@@ -38,21 +38,15 @@ $seeder->import(
 
             $item = $mapper->createEntity();
 
-            $item->setTitle(
-                $faker->sentence(2)
-            );
+            $item->title = $faker->sentence(2);
 
-            $item->setAlias($item->getTitle());
-            $item->setImage($faker->unsplashImage(1600, 900));
-            $item->setContent($content);
-            $item->setState(1);
-            $item->setExtends($formkitPackage->getDefaultExtends());
-            $item->setPublishUp(
-                random_int(0, 3) ? null : $published
-            );
-            $item->setPublishDown(
-                random_int(0, 3) ? null : $published->modify('+60days')
-            );
+            $item->alias = $item->title;
+            $item->image = $faker->unsplashImage(1600, 900);
+            $item->content = $content;
+            $item->state = 1;
+            $item->extends = $formkitPackage->getDefaultExtends();
+            $item->publishUp = random_int(0, 3) ? null : $published;
+            $item->publishDown = random_int(0, 3) ? null : $published->modify('+60days');
 
             $item = $mapper->createOne($item);
 
@@ -62,17 +56,15 @@ $seeder->import(
                 $agent = new Browser([], $faker->userAgent());
 
                 $res = new FormkitResponse();
-                $res->setFormkitId($item->getId());
-                $res->setContent($resContent);
-                $res->setState(
-                    $faker->randomElement(ResState::cases())
-                );
-                $res->setFrom($faker->url());
-                $res->setIp($faker->ipv4());
-                $res->setUa($agent->getUserAgent());
-                $res->setBrowser($agent->browser() . '/' . $agent->version($agent->browser()));
-                $res->setDevice($agent->deviceType() . '/' . ($agent->device() ?: 'PC'));
-                $res->setOs($agent->platform());
+                $res->formkitId = $item->id;
+                $res->content = $resContent;
+                $res->state = $faker->randomElement(ResState::cases());
+                $res->from = $faker->url();
+                $res->ip = $faker->ipv4();
+                $res->ua = $agent->getUserAgent();
+                $res->browser = $agent->browser() . '/' . $agent->version($agent->browser());
+                $res->device = $agent->deviceType() . '/' . ($agent->device() ?: 'PC');
+                $res->os = $agent->platform();
 
                 $orm->createOne($res);
 

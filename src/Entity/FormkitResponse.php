@@ -23,6 +23,8 @@ use Windwalker\ORM\EntityInterface;
 use Windwalker\ORM\EntityTrait;
 use Windwalker\ORM\Metadata\EntityMetadata;
 
+// phpcs:disable
+// todo: remove this when phpcs supports 8.4
 #[Table('formkit_responses', 'formkit_response')]
 #[\AllowDynamicProperties]
 class FormkitResponse implements EntityInterface
@@ -30,58 +32,64 @@ class FormkitResponse implements EntityInterface
     use EntityTrait;
 
     #[Column('id'), PK, AutoIncrement]
-    protected ?int $id = null;
+    public ?int $id = null;
 
     #[Column('formkit_id')]
-    protected int $formkitId = 0;
+    public int $formkitId = 0;
 
     #[Column('content')]
     #[Cast(JsonCast::class)]
-    protected array $content = [];
+    public array $content = [];
 
     #[Column('state')]
     #[Cast(ResState::class)]
-    protected ResState $state = ResState::PENDING;
+    public ResState $state = ResState::PENDING {
+        set(ResState|string $value) => $this->state = ResState::wrap($value);
+    }
 
     #[Column('from')]
-    protected string $from = '';
+    public string $from = '';
 
     #[Column('ip')]
-    protected string $ip = '';
+    public string $ip = '';
 
     #[Column('ua')]
-    protected string $ua = '';
+    public string $ua = '';
 
     #[Column('browser')]
-    protected string $browser = '';
+    public string $browser = '';
 
     #[Column('os')]
-    protected string $os = '';
+    public string $os = '';
 
     #[Column('device')]
-    protected string $device = '';
+    public string $device = '';
 
     #[Column('created')]
     #[CastNullable(ServerTimeCast::class)]
     #[CreatedTime]
-    protected ?Chronos $created = null;
+    public ?Chronos $created = null {
+        set(\DateTimeInterface|string|null $value) => $this->created = Chronos::tryWrap($value);
+    }
 
     #[Column('modified')]
     #[CastNullable(ServerTimeCast::class)]
     #[CurrentTime]
-    protected ?Chronos $modified = null;
+    public ?Chronos $modified = null {
+        set(\DateTimeInterface|string|null $value) => $this->modified = Chronos::tryWrap($value);
+    }
 
     #[Column('created_by')]
     #[Author]
-    protected int $createdBy = 0;
+    public int $createdBy = 0;
 
     #[Column('modified_by')]
     #[Modifier]
-    protected int $modifiedBy = 0;
+    public int $modifiedBy = 0;
 
     #[Column('params')]
     #[Cast(JsonCast::class)]
-    protected array $params = [];
+    public array $params = [];
 
     #[EntitySetup]
     public static function setup(EntityMetadata $metadata): void

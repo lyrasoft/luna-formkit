@@ -32,7 +32,7 @@ class FormkitEditNavComponent extends AbstractComponent
 
         if ($this->formkit) {
             $count = $this->orm->from(FormkitResponse::class)
-                ->where('formkit_id', $this->formkit->getId())
+                ->where('formkit_id', $this->formkit->id)
                 ->count();
         } else {
             $count = 0;

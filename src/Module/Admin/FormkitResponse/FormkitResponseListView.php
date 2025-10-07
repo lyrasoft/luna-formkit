@@ -152,7 +152,7 @@ class FormkitResponseListView implements ViewModelInterface, FilterAwareViewMode
     protected function prepareMetadata(HtmlFrame $htmlFrame, Formkit $formkit): void
     {
         $htmlFrame->setTitle(
-            '觀看提交: ' . $formkit->getTitle()
+            '觀看提交: ' . $formkit->title
         );
     }
 

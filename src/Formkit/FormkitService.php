@@ -86,7 +86,7 @@ class FormkitService
          */
         [$item, $fields, $form] = $this->getFormkitMeta($item, $options);
 
-        $id = $item->getId();
+        $id = $item->id;
 
         $formkitService = $this;
         $force = $options['force'] ?? false;
@@ -131,7 +131,7 @@ class FormkitService
             $item = $this->orm->mustFindOne(Formkit::class, $item);
         }
 
-        $fields = collect($item->getContent());
+        $fields = collect($item->content);
         $formFactory = $this->app->retrieve(FormFactory::class);
         $form = $formFactory->create();
         $form->setNamespace($options['control'] ?? 'formkit');
@@ -156,7 +156,7 @@ class FormkitService
             }
         );
 
-        $captcha = (bool) ($item->getParams()['captcha'] ?? false);
+        $captcha = (bool) ($item->params['captcha'] ?? false);
 
         if ($captcha) {
             $form->add('captcha', CaptchaField::class)
@@ -187,12 +187,12 @@ class FormkitService
     public function checkAvailable(Formkit $item): void
     {
         // Check published
-        if (!$item->getState()->isPublished()) {
+        if (!$item->state->isPublished()) {
             throw new FormkitUnpublishedException('Not enabled');
         }
 
-        $up = $item->getPublishUp();
-        $down = $item->getPublishDown();
+        $up = $item->publishUp;
+        $down = $item->publishDown;
 
         if ($up !== null && $up->isFuture()) {
             throw new FormkitUnpublishedException('Formkit not publish up yet');
@@ -277,8 +277,8 @@ class FormkitService
     {
         $subject ??= sprintf(
             '[表單提交 #%s] %s - %s',
-            $res->getId(),
-            $item->getTitle(),
+            $res->id,
+            $item->title,
             now('Y-m-d H:i:s')
         );
 
