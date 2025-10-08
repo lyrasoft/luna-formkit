@@ -1,10 +1,10 @@
-// export * from '~formkit/fields';
+import { FormkitModule } from '~formkit/formkit';
+
 export * from '~formkit/services/form-mixin';
 export * from '~formkit/services/registry';
-
 export * from '~formkit/types/form-field';
 
-export function useFormkit() {
+export function useFormkit(): Promise<FormkitModule> {
   return import('~formkit/formkit');
 }
 

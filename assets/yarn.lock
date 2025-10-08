@@ -1293,6 +1293,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"formkit@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "formkit@workspace:."
+  dependencies:
+    "@types/fs-extra": "npm:^11"
+    "@types/systemjs": "npm:^6.13.5"
+    "@vitejs/plugin-vue": "npm:^6.0.1"
+    "@windwalker-io/unicorn-next": "npm:^0.1.0"
+    bootstrap-vue-next: "npm:^0.40.6"
+    cross-env: "npm:^10.0.0"
+    fs-extra: "npm:^11.3.2"
+    rimraf: "npm:^6.0.1"
+    typescript: "npm:^5.5.4"
+    unplugin-dts: "npm:^1.0.0-beta.6"
+    vite: "npm:^7.1.9"
+    vue: "npm:^3.0"
+    vue-draggable-plus: "npm:^0.6.0"
+  languageName: unknown
+  linkType: soft
+
 "fs-extra@npm:^11.3.2":
   version: 11.3.2
   resolution: "fs-extra@npm:11.3.2"
@@ -2029,26 +2049,6 @@ __metadata:
   checksum: 10c0/aaec0f57e887d4fb37d152f93cf7133954eec79d11643e95de768ec9a377f08793b1745c648ca65a0dcc6c795c4d9ca398724d013e5745de270e88a543782aea
   languageName: node
   linkType: hard
-
-"root-workspace-0b6124@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "root-workspace-0b6124@workspace:."
-  dependencies:
-    "@types/fs-extra": "npm:^11"
-    "@types/systemjs": "npm:^6.13.5"
-    "@vitejs/plugin-vue": "npm:^6.0.1"
-    "@windwalker-io/unicorn-next": "npm:^0.1.0"
-    bootstrap-vue-next: "npm:^0.40.6"
-    cross-env: "npm:^10.0.0"
-    fs-extra: "npm:^11.3.2"
-    rimraf: "npm:^6.0.1"
-    typescript: "npm:^5.5.4"
-    unplugin-dts: "npm:^1.0.0-beta.6"
-    vite: "npm:^7.1.9"
-    vue: "npm:^3.0"
-    vue-draggable-plus: "npm:^0.6.0"
-  languageName: unknown
-  linkType: soft
 
 "safer-buffer@npm:>= 2.1.2 < 3.0.0":
   version: 2.1.2

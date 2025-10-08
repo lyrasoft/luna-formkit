@@ -1,4 +1,4 @@
-import { useFormValidation, useUniDirective, module, route, __, html, selectAll } from "@windwalker-io/unicorn-next";
+import { useUniDirective, route, __, html, selectAll, module, useFormValidation } from "@windwalker-io/unicorn-next";
 useFormValidation();
 class FormkitHandler {
   constructor(el, uid) {
@@ -71,7 +71,7 @@ class FormkitHandler {
     });
   }
 }
-useUniDirective(
+const ready = useUniDirective(
   "formkit",
   {
     mounted(el, { value }) {
@@ -79,4 +79,8 @@ useUniDirective(
     }
   }
 );
+export {
+  FormkitHandler,
+  ready
+};
 //# sourceMappingURL=formkit.js.map

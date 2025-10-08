@@ -82,16 +82,13 @@ export default defineConfig(({ mode }) => {
         insertTypesEntry: true,
         outDir: 'dist',
         tsconfigPath: resolve('./tsconfig.json'),
-        // bundleTypes: true,
+        bundleTypes: true,
         // rollupTypes: true
       }),
       {
         name: 'clear-files',
         generateBundle() {
           // rimraf.sync('./dist/**/*.js', { glob: true });
-          // rimraf.sync('./dist/**/*.ts', { glob: true });
-          // rimraf.sync('./dist/**/*.map', { glob: true });
-          // rimraf.sync('./dist/luna-admin.css', { glob: true });
         }
       }
     ]

@@ -3,7 +3,7 @@ import { __, html, module, route, selectAll, useFormValidation, useUniDirective 
 
 useFormValidation();
 
-class FormkitHandler {
+export class FormkitHandler {
   constructor(protected el: HTMLElement, protected uid: string) {
     this.registerValidation();
     this.autoCheckOther();
@@ -107,11 +107,16 @@ class FormkitHandler {
   }
 }
 
-useUniDirective<HTMLElement>(
+export const ready = useUniDirective<HTMLElement>(
   'formkit',
   {
     mounted(el, { value }) {
       module(el, 'formkit', (el) => new FormkitHandler(el, value))
     }
   }
-)
+);
+
+export interface FormkitModule {
+  FormkitHandler: typeof FormkitHandler;
+  ready: typeof ready;
+}

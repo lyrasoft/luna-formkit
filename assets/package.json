@@ -1,4 +1,5 @@
 {
+    "name": "formkit",
     "private": true,
     "scripts": {
         "dev": "vite build --mode development --watch",
