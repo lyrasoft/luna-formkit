@@ -117,8 +117,6 @@ HELP;
 }
 
 exit((new Release())
-    ->addScript('rm -rf ../assets/dist/*.js.map')
-    ->addScript('rm -rf ../assets/dist/chunks/*')
     ->addScript('yarn --cwd ./assets build:prod')
     ->addScript('git add .')
     ->execute());
