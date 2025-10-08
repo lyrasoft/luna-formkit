@@ -1,0 +1,35 @@
+import { defineComponent } from "vue";
+const formFile = defineComponent({
+  name: "FormText",
+  template: `
+    <div class="mt-3">
+      <div class="row gy-3">
+        <div class="col-lg-2 c-input c-input--max">
+          <label :for="getId('max')" class="mr-2">可選檔案數量</label>
+          <input :id="getId('max')" type="number" min="0" v-model="item.max" class="form-control">
+        </div>
+        <div class="col-lg-5 c-input c-input--accept">
+          <label :for="getId('accept')" class="mr-2">可接受副檔名（半型逗號分隔）</label>
+          <input :id="getId('accept')" type="text" v-model="item.accept" class="form-control">
+        </div>
+        <div class="col-lg-3 c-input c-input--max_size">
+          <label :for="getId('max_size')" class="mr-2">大小限制 (MB)</label>
+          <input :id="getId('max_size')" type="number" v-model="item.max_size" class="form-control">
+        </div>
+      </div>
+    </div>
+  `,
+  props: {
+    ...useFormkitField.props
+  },
+  setup(props, ctx) {
+    const mixin = useFormkitField(props, ctx);
+    return {
+      ...mixin
+    };
+  }
+});
+export {
+  formFile as default
+};
+//# sourceMappingURL=form-file.js.map

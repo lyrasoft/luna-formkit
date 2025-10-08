@@ -6,6 +6,11 @@ import {
   useFormValidation,
   useKeepAlive,
 } from '@windwalker-io/unicorn-next';
+import { useFormkitEditor } from '~vendor/lyrasoft/formkit/dist/index';
+
+const { mount } = await useFormkitEditor();
+
+mount('formkit-edit-app');
 
 const formSelector = '#admin-form';
 

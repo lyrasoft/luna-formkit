@@ -6,6 +6,8 @@ namespace Lyrasoft\Formkit;
 
 use Lyrasoft\Formkit\Component\FormkitEditNavComponent;
 use Lyrasoft\Formkit\Component\PublishingDropdownComponent;
+use Lyrasoft\Formkit\Entity\Formkit;
+use Lyrasoft\Formkit\Entity\FormkitResponse;
 use Lyrasoft\Formkit\Formkit\FormkitService;
 use Windwalker\Core\Package\AbstractPackage;
 use Windwalker\Core\Package\PackageInstaller;
@@ -89,18 +91,8 @@ class FormkitPackage extends AbstractPackage implements ServiceProviderInterface
         $installer->installRoutes(static::path('routes/**/*.php'), 'routes');
         $installer->installViews(static::path('views/**/*.blade.php'), 'views');
 
-        $installer->installMVCModules(
-            'formkit',
-            ['Admin'],
-            true
-        );
-
-        $installer->installMVCModules(
-            'Formkit',
-            ['Admin'],
-            true
-        );
-
-        $installer->installMVCModules('FormkitResponse');
+        $installer->installMVCModules(Formkit::class, ['Admin'], true);
+        $installer->installMVCModules(FormkitResponse::class);
+        $installer->installFiles(static::path('assets/src/**/*'), 'resources/assets/src/formkit', 'assets');
     }
 }

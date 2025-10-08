@@ -1,7 +1,7 @@
 
-import '@main';
+import { __, html, module, route, selectAll, useFormValidation, useUniDirective } from '@windwalker-io/unicorn-next';
 
-u.formValidation();
+useFormValidation();
 
 class FormkitHandler {
   constructor(protected el: HTMLElement, protected uid: string) {
@@ -12,7 +12,7 @@ class FormkitHandler {
   async registerValidation() {
     const form = this.el.querySelector('form')!;
 
-    const action = u.route('formkit.action.' + this.uid);
+    const action = route('formkit.action.' + this.uid);
     const button = this.el.querySelector<HTMLButtonElement>('[data-task=submit]')!;
 
     button.addEventListener('click', () => {
@@ -59,8 +59,8 @@ class FormkitHandler {
 
           // 確認沒有勾選就產生錯誤提示
           if (checked.length === 0) {
-            const text = u.__('unicorn.message.validation.value.missing');
-            const help = u.html(`<small class="invalid-feedback form-control-tooltip d-block">${text}</small>`);
+            const text = __('unicorn.message.validation.value.missing');
+            const help = html(`<small class="invalid-feedback form-control-tooltip d-block">${text}</small>`);
 
             // 設定 HTML5 驗證結果
             for (const $input of $inputs) {
@@ -94,7 +94,7 @@ class FormkitHandler {
   }
 
   autoCheckOther() {
-    u.selectAll<HTMLInputElement>('.js-other-text', (el) => {
+    selectAll<HTMLInputElement>('.js-other-text', (el) => {
       el.addEventListener('input', () => {
         const option = el.closest('[data-input-option]')
           ?.querySelector<HTMLInputElement>('[data-radio-item-input], [data-checkbox-item-input]');
@@ -107,11 +107,11 @@ class FormkitHandler {
   }
 }
 
-u.directive(
+useUniDirective<HTMLElement>(
   'formkit',
   {
     mounted(el, { value }) {
-      u.module<any, HTMLElement>(el, 'formkit', (el) => new FormkitHandler(el, value))
+      module(el, 'formkit', (el) => new FormkitHandler(el, value))
     }
   }
 )

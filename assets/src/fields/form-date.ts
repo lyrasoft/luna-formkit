@@ -1,9 +1,6 @@
+import { defineComponent } from 'vue';
 
-import '@main';
-
-export default function (app: any, vue: typeof Vue) {
-  const { defineComponent } = vue;
-
+export default function (app: any) {
   return defineComponent({
     name: 'FormDate',
     template: `

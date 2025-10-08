@@ -152,19 +152,15 @@ There has 3 porisions you can insert widgets to field card:
 
 The code example:
 
-```ts
-import '@main';
-import type { App } from 'vue';
+```vue
+// resources/assets/src/formkit/FieldCardEnd.vue
+<script setup lang="ts">
+import { FieldEditCotent } from '~vendor/lyrasoft/formkit/dist';
 
-const { watch, ref } = Vue;
+const item = defineModel<FieldEditCotent>();
+</script>
 
-u.on('formkit.prepared', (app: App) => {
-  app.provide('field.card.end', FieldCardEnd);
-});
-
-const FieldCardEnd = Vue.defineComponent({
-  name: 'FieldCardEnd',
-  template: `
+<template>
   <div class="row">
     <div class="form-group col-lg-3">
       <label class="form-label" for="">背景顏色</label>
@@ -175,21 +171,18 @@ const FieldCardEnd = Vue.defineComponent({
     </div>
     ...
   </div>
-  `,
-  props: {
-    modelValue: null,
-  },
-  setup(props, { emit }) {
-    const item = ref(props.modelValue);
+</template>
+```
 
-    watch(item, (v) => {
-      emit('update:modelValue', v);
-    }, { deep: true });
+```ts
+// admin/main.ts
+import FieldCardEnd from '~/formkit/FieldCardEnd.vue';
+import { App as VueApp } from 'vue';
 
-    return {
-      item
-    };
-  }
+const u = useUnicorn();
+
+u.on('formkit.prepared', (app: VueApp) => {
+    app.provide('field.card.end', FieldCardEnd);
 });
 ```
 
@@ -197,11 +190,98 @@ const FieldCardEnd = Vue.defineComponent({
 
 Fields components is localted at `assets/src/fields/*.ts`, copy the file you want to override to root project's `resources/assets/src`.
 
-And use `$asset->alias()` to override this file.
+And register new component in `admin/main.ts`:
 
 ```php
-$asset->alias(
-    'vendor/lyrasoft/formkit/dist/fields/form-text.js',
-    'js/path/to/form-text.js',
-);
+import { useFieldComponents } from '~vendor/lyrasoft/formkit/dist';
+
+useFieldComponents({
+  'text': () => import('~/formkit/my-form-text'),
+});
 ```
+
+### Add New Field Type
+
+Create a new PHP class for field type:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Formkit;
+
+use Lyrasoft\Formkit\Formkit\Type\AbstractFormType;
+use Windwalker\Core\Application\AppContext;
+use Windwalker\Core\Asset\AssetService;
+
+class FormHello extends AbstractFormType
+{
+    public static function getTitle(): string
+    {
+        return 'Hello Form';
+    }
+
+    public static function getId(): string
+    {
+        return 'hello';
+    }
+
+    public static function getIcon(): string
+    {
+        return 'fa fa-smile';
+    }
+
+    public static function getDescription(): string
+    {
+        return 'A simple hello world form.';
+    }
+
+    public static function loadVueComponent(AppContext $app, AssetService $asset): ?string
+    {
+        return $asset->path('@vite/src/formkit/FormHello.vue');
+    }
+}
+```
+
+Register it to `formkit.config.php`:
+
+```diff
+    // ...
+
+    'types' => [
++        FormHello::getId() => FormHello::class,
+        FormText::getId() => FormText::class,
+        FormTextarea::getId() => FormTextarea::class,
+        
+        // ...
+    ]
+```
+
+Create vue file for admin editor:
+
+```vue
+// resources/assets/src/formkit/FormHello.vue
+<script setup lang="ts">
+import { onMounted } from 'vue';
+import { FieldEditCotent } from '~vendor/lyrasoft/formkit/dist';
+
+const item = defineModel<FieldEditCotent>();
+
+</script>
+
+<template>
+    <div>
+        <h3>Hello Form</h3>
+    </div>
+</template>
+
+<style scoped>
+
+</style>
+
+```
+
+Then run `yarn build` or `yarn dev`, you will see new field type:
+
+![Image](https://github.com/user-attachments/assets/61390941-6d48-48c8-9a17-bd14674adbe1)

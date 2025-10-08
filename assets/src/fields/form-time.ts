@@ -1,23 +1,18 @@
+import { defineComponent } from 'vue';
 
-import '@main';
+export default defineComponent({
+  name: 'FormTime',
+  template: `
 
-export default function (app: any, vue: typeof Vue) {
-  const { defineComponent } = vue;
+  `,
+  props: {
+    ...useFormkitField.props
+  },
+  setup(props, ctx) {
+    const mixin = useFormkitField(props, ctx);
 
-  return defineComponent({
-    name: 'FormTime',
-    template: `
-      
-    `,
-    props: {
-      ...useFormkitField.props
-    },
-    setup(props, ctx) {
-        const mixin = useFormkitField(props, ctx);
-
-        return {
-          ...mixin
-        };
-    },
-  });
-}
+    return {
+      ...mixin
+    };
+  },
+});

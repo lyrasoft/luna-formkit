@@ -4,14 +4,9 @@ declare(strict_types=1);
 
 namespace Lyrasoft\Formkit\Formkit\Type;
 
-use Lyrasoft\Formkit\Entity\Formkit;
-use Windwalker\Core\Application\Context\AppRequestInterface;
 use Windwalker\Core\Application\ServiceAwareInterface;
-use Windwalker\Core\Http\AppRequest;
 use Windwalker\Form\Field\AbstractField;
 use Windwalker\Form\Field\CheckboxesField;
-use Windwalker\IO\Input;
-use Windwalker\Utilities\Arr;
 use Windwalker\Utilities\Contract\LanguageInterface;
 
 use function Windwalker\collect;

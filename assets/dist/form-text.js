@@ -1,0 +1,43 @@
+import { defineComponent } from "vue";
+const formText = defineComponent({
+  name: "FormText",
+  template: `
+    <div class="mt-3 row align-items-center l-form-text-options"
+      :class="'l-form-text-options--' + item.subtype">
+      <!-- Subtype -->
+      <div class="col-lg-2 c-input c-input--subtype">
+        <label :for="getId('subtype')" class="form-label text-nowrap">
+          限定格式
+        </label>
+        <select :id="getId('subtype')" v-model="item.subtype" class="form-select">
+          <option value="text">一般文字</option>
+          <option value="number">數字</option>
+          <option value="email">Email</option>
+          <option value="url">網址</option>
+          <option value="tel">電話</option>
+        </select>
+      </div>
+
+      <!-- Pattern -->
+      <!--<div class="col-lg-4">-->
+      <!--  <label :for="getId('pattern')" class="form-label text-nowrap">-->
+      <!--    字串檢查語法 (Regex)-->
+      <!--  </label>-->
+      <!--  <input :id="getId('pattern')" type="text" class="form-control" v-model="item.pattern" />-->
+      <!--</div>-->
+    </div>
+  `,
+  props: {
+    ...useFormkitField.props
+  },
+  setup(props, ctx) {
+    const mixin = useFormkitField(props, ctx);
+    return {
+      ...mixin
+    };
+  }
+});
+export {
+  formText as default
+};
+//# sourceMappingURL=form-text.js.map

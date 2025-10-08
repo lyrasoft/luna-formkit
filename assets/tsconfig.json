@@ -1,11 +1,22 @@
 {
     "extends": [
-        "./tsconfig.vue.json",
+        "@windwalker-io/unicorn-next/tsconfig.js.json"
+    ],
+    "include": [
+        "src/**/*.ts",
+        "src/**/*.vue"
+    ],
+    "exclude": [
+        "node_modules/**/*"
+    ],
+    "types": [
+        "reflect-metadata"
     ],
     "compilerOptions": {
         "paths": {
-            "@/*": ["./"],
-            "@vue/*": ["./vue/*"],
+            "~formkit/*": [
+                "./src/*"
+            ]
         }
     }
 }
