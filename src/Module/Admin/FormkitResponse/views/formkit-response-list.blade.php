@@ -112,7 +112,7 @@ $workflow = $app->service(ResponseWorkflow::class);
                 <tbody>
                 @forelse($items as $i => $item)
                     @php
-                        $content = $item->getContent();
+                        $content = $item->content;
                     @endphp
                     <tr>
                         {{-- Checkbox --}}
@@ -148,12 +148,12 @@ $workflow = $app->service(ResponseWorkflow::class);
 
                         {{-- ID --}}
                         <td class="">
-                            #{{ $item->getId() }}
+                            #{{ $item->id }}
                         </td>
 
                         <td>
                             <a class="btn btn-sm btn-info"
-                                href="{{ $nav->to('formkit_response_edit')->id($item->getId())->layout('preview') }}"
+                                href="{{ $nav->to('formkit_response_edit')->id($item->id)->layout('preview') }}"
                                 uni-modal-link="#preview-modal"
                                 data-resize="1"
                             >
@@ -168,7 +168,7 @@ $workflow = $app->service(ResponseWorkflow::class);
 
                         {{-- Created --}}
                         <td class="text-nowrap">
-                            {{ $chronos->toLocalFormat($item->getCreated()) }}
+                            {{ $chronos->toLocalFormat($item->created) }}
                         </td>
 
                         @foreach ($previewFields as $previewField)

@@ -54,13 +54,13 @@ $return = $options['return'];
 $uniScript->addRoute(
     'formkit.action.' . $uid,
     $nav->to('formkit_submit')
-        ->id($item->getId())
+        ->id($item->id)
         ->var('ns', $form->getNamespace())
         ->withReturn(return: $return)
         ->full()
 );
 
-$captcha = (bool) ($item->getParams()['captcha'] ?? false);
+$captcha = (bool) ($item->params['captcha'] ?? false);
 
 ?>
 <div id="{{ $formId }}-wrapper" class="l-formkit-wrapper mb-5 mt-5" data-role="formkit"
@@ -68,9 +68,9 @@ $captcha = (bool) ($item->getParams()['captcha'] ?? false);
     <form id="{{ $formId }}" method="post" enctype="multipart/form-data"
         uni-form-validate='{"scroll": true}'>
         <div class="l-formkit-content mb-5">
-            @if (trim($item->getDescription()))
+            @if (trim($item->description))
                 <div class="l-formkit-content__desc">
-                    {!! $item->getDescription() !!}
+                    {!! $item->description !!}
                 </div>
             @endif
         </div>

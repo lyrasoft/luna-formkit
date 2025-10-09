@@ -40,8 +40,8 @@ $userService = $app->retrieve(UserService::class);
 
 [, $fields] = $formkitService->getFormkitMeta($formkit);
 
-$user = $userService->load(['id' => $item->getCreatedBy()]);
-$content = $item->getContent();
+$user = $userService->load(['id' => $item->createdBy]);
+$content = $item->content;
 
 ?>
 <table class="table table-striped c-preview-table">
@@ -52,7 +52,7 @@ $content = $item->getContent();
             @lang('unicorn.field.id')
         </th>
         <td>
-            #{{ $item->getId() }}
+            #{{ $item->id }}
         </td>
     </tr>
 
@@ -62,7 +62,7 @@ $content = $item->getContent();
             @lang('unicorn.field.created')
         </th>
         <td>
-            {{ $chronos->toLocalFormat($item->getCreated()) }}
+            {{ $chronos->toLocalFormat($item->created) }}
         </td>
     </tr>
 
@@ -73,7 +73,7 @@ $content = $item->getContent();
                 會員
             </th>
             <td>
-                {{ $user->getName() }}
+                {{ $user->name }}
             </td>
         </tr>
     @endif
@@ -101,11 +101,11 @@ $content = $item->getContent();
         </th>
         <td>
             <div>
-                {{ $item->getIp() }}
+                {{ $item->ip }}
             </div>
 
             <div>
-                {{ $item->getUa() }}
+                {{ $item->ua }}
             </div>
         </td>
     </tr>

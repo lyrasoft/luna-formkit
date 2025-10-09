@@ -102,7 +102,7 @@ $workflow = $app->service(BasicStateWorkflow::class);
                     <tr>
                         {{-- Checkbox --}}
                         <td>
-                            <x-row-checkbox :row="$i" :id="$item->getId()"></x-row-checkbox>
+                            <x-row-checkbox :row="$i" :id="$item->id"></x-row-checkbox>
                         </td>
 
                         {{-- State --}}
@@ -111,10 +111,10 @@ $workflow = $app->service(BasicStateWorkflow::class);
                                 button-style="width: 100%"
                                 use-states
                                 :workflow="$workflow"
-                                :id="$item->getId()"
+                                :id="$item->id"
                                 :value="$item->state"
-                                :publish-up="$item->getPublishUp()"
-                                :publish-down="$item->getPublishDown()"
+                                :publish-up="$item->publishUp"
+                                :publish-down="$item->publishDown"
                             >
 
                             </x-publishing-dropdown>
@@ -123,8 +123,8 @@ $workflow = $app->service(BasicStateWorkflow::class);
                         {{-- Title --}}
                         <td>
                             <div>
-                                <a href="{{ $nav->to('formkit_edit')->id($item->getId()) }}">
-                                    {{ $item->getTitle() }}
+                                <a href="{{ $nav->to('formkit_edit')->id($item->id) }}">
+                                    {{ $item->title }}
                                 </a>
                             </div>
                         </td>
@@ -147,7 +147,7 @@ $workflow = $app->service(BasicStateWorkflow::class);
                         </td>
 
                         <td class="text-nowrap">
-                            <a href="{{ $nav->to('formkit_response_list')->var('formkit_id', $item->getId()) }}"
+                            <a href="{{ $nav->to('formkit_response_list')->var('formkit_id', $item->id) }}"
                                 class="btn btn-sm btn-outline-primary">
                                 <i class="far fa-list"></i>
                                 觀看提交
@@ -160,7 +160,7 @@ $workflow = $app->service(BasicStateWorkflow::class);
                         {{-- Delete --}}
                         <td class="text-center">
                             <button type="button" class="btn btn-sm btn-outline-secondary"
-                                @click="grid.deleteItem('{{ $item->getId() }}')"
+                                @click="grid.deleteItem('{{ $item->id }}')"
                                 data-dos
                             >
                                 <i class="fa-solid fa-trash"></i>
@@ -169,7 +169,7 @@ $workflow = $app->service(BasicStateWorkflow::class);
 
                         {{-- ID --}}
                         <td class="text-end">
-                            {{ $item->getId() }}
+                            {{ $item->id }}
                         </td>
                     </tr>
                 @empty
