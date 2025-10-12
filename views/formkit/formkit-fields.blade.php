@@ -30,11 +30,21 @@ use Windwalker\Data\Collection;
 use Windwalker\Form\Form;
 
 /**
-* @var $item           Formkit
-* @var $form           Form
-* @var $fields         Collection<AbstractFormType>
-* @var $options        FormkitOptions
-* @var $formkitService FormkitService
+ * @var $item           Formkit
+ * @var $form           Form
+ * @var $fields         Collection<AbstractFormType>
+ * @var $options        FormkitOptions
+ * @var $formkitService FormkitService
  */
 
 ?>
+
+@foreach ($fields as $field)
+    @php
+        $formField = $form[$field->getLabel()];
+        if (!$formField) {
+            throw new \OutOfBoundsException('FormField of ' . $field->getLabel() . ' not found.');
+        }
+    @endphp
+    @include('formkit.formkit-field', compact('field', 'formField', 'formkitService', 'options'))
+@endforeach

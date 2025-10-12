@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Lyrasoft\Formkit\Formkit\Type;
 
+use Lyrasoft\Formkit\Data\FieldRecord;
 use Lyrasoft\Formkit\Entity\Formkit;
 use Windwalker\Core\Application\AppContext;
-use Windwalker\Core\Application\Context\AppRequestInterface;
 use Windwalker\Core\Application\ServiceAwareInterface;
 use Windwalker\Core\Asset\AssetService;
 use Windwalker\Core\Http\AppRequest;
@@ -15,13 +15,11 @@ use Windwalker\Form\Field\AbstractField;
 use Windwalker\Form\Field\TextField;
 use Windwalker\Utilities\Contract\LanguageInterface;
 
-use Windwalker\Utilities\TypeCast;
-
 use function Windwalker\collect;
 
 abstract class AbstractFormType
 {
-    protected Collection $data;
+    protected FieldRecord $data;
 
     abstract public static function getTitle(): string;
 
@@ -98,14 +96,14 @@ abstract class AbstractFormType
         ];
     }
 
-    public function getData(): Collection
+    public function getData(): FieldRecord
     {
         return $this->data;
     }
 
-    public function setData(mixed $data): static
+    public function setData(FieldRecord $data): static
     {
-        $this->data = collect($data);
+        $this->data = $data;
 
         return $this;
     }

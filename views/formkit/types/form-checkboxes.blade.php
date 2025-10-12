@@ -17,6 +17,7 @@ namespace Lyrasoft\Formkit\view;
  */
 
 use Lyrasoft\Formkit\Entity\Formkit;
+use Lyrasoft\Formkit\Formkit\FormkitOptions;
 use Lyrasoft\Formkit\Formkit\FormkitService;
 use Lyrasoft\Formkit\Formkit\Type\AbstractFormType;
 use Lyrasoft\Formkit\Formkit\Type\FormCheckboxes;
@@ -35,7 +36,7 @@ use Windwalker\Form\Form;
  * @var $item           Formkit
  * @var $form           Form
  * @var $fields         Collection<AbstractFormType>
- * @var $options        array
+ * @var $options        FormkitOptions
  * @var $formkitService FormkitService
  * @var $field          FormCheckboxes
  * @var $formField      ListField
@@ -47,6 +48,6 @@ if ($field->hasOther()) {
         '其他',
     );
 }
-?>
 
+?>
 <x-field :field="$formField"></x-field>

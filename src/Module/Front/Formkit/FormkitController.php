@@ -50,7 +50,7 @@ class FormkitController
 
         RequestAssert::assert($id, 'No ID');
 
-        [$formkit, $fields, $form] = $formkitService->getFormkitMeta($id);
+        [$formkit, $fields, $form] = $formkitService->prepareFormkit($id);
 
         $captcha = (bool) ($formkit->params['captcha'] ?? false);
 

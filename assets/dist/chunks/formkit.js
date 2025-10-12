@@ -1,23 +1,30 @@
-import { useUniDirective, route, __, html, selectAll, module, useFormValidation } from "@windwalker-io/unicorn-next";
+import { useUniDirective, hasRoute, route, __, html, selectAll, uid, module, useFormValidation } from "@windwalker-io/unicorn-next";
 useFormValidation();
 class FormkitHandler {
-  constructor(el, uid) {
+  constructor(el, uid2) {
     this.el = el;
-    this.uid = uid;
+    this.uid = uid2;
     this.registerValidation();
     this.autoCheckOther();
+    this.toggleSelectOtherInput();
   }
   async registerValidation() {
-    const form = this.el.querySelector("form");
-    const action = route("formkit.action." + this.uid);
-    const button = this.el.querySelector("[data-task=submit]");
-    button.addEventListener("click", () => {
-      form.action = action;
-      form.requestSubmit();
-      setTimeout(() => {
-        form.removeAttribute("action");
-      }, 500);
-    });
+    const form = this.el.querySelector("form") || this.el.closest("form");
+    if (!form) {
+      return;
+    }
+    const routeKey = "formkit.action." + this.uid;
+    if (hasRoute(routeKey)) {
+      const action = route(routeKey);
+      const button = this.el.querySelector("[data-task=submit]");
+      button?.addEventListener("click", () => {
+        form.action = action;
+        form.requestSubmit();
+        setTimeout(() => {
+          form.removeAttribute("action");
+        }, 500);
+      });
+    }
     form.addEventListener("submit", (e) => {
       let invalid = 0;
       let scrollTarget = void 0;
@@ -70,12 +77,31 @@ class FormkitHandler {
       });
     });
   }
+  toggleSelectOtherInput() {
+    const selectInputs = selectAll("select[data-field-input]");
+    for (const selectInput of selectInputs) {
+      selectInput.addEventListener("change", () => toggle(selectInput));
+      toggle(selectInput);
+    }
+    function toggle(selectInput) {
+      const option = selectInput.querySelector("option[data-other-option]");
+      const otherInput = selectInput.closest(".l-form-select-wrapper")?.querySelector(".js-other-text");
+      if (option && otherInput) {
+        if (option.selected) {
+          otherInput.style.display = "block";
+        } else {
+          otherInput.style.display = "none";
+        }
+      }
+    }
+  }
 }
 const ready = useUniDirective(
   "formkit",
   {
     mounted(el, { value }) {
-      module(el, "formkit", (el2) => new FormkitHandler(el2, value));
+      const uniId = value || uid();
+      module(el, "formkit", (el2) => new FormkitHandler(el2, uniId));
     }
   }
 );

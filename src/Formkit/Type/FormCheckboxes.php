@@ -130,6 +130,7 @@ class FormCheckboxes extends FormSelect
         $options = collect();
 
         $selected = (array) ($content[$this->getLabel()] ?? []);
+        $labels = $this->prepareViewLabels();
 
         $options[] = '<ul>';
 
@@ -141,8 +142,8 @@ class FormCheckboxes extends FormSelect
 
         $otherLabel = $this->getLabel() . '_other';
 
-        $data[$this->getLabel()] = (string) $options->implode('');
-        $data['其他'] = $content[$otherLabel] ?? '';
+        $data[$labels[0]] = (string) $options->implode('');
+        $data[$labels[1]] = $content[$otherLabel] ?? '';
 
         return $data;
     }

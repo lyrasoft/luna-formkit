@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Lyrasoft\Formkit\Formkit\Type;
 
 use Windwalker\Core\Language\TranslatorTrait;
-use Windwalker\DOM\DOMElement;
+use Windwalker\DOM\HTMLElement;
 use Windwalker\Form\Field\ListField;
 
 use function Windwalker\DOM\h;
@@ -34,7 +34,7 @@ trait ListFormkitTrait
         );
     }
 
-    public function getOptionText(ListField $field): DOMElement
+    public function getOptionText(ListField $field): HTMLElement
     {
         return h(
             'div',
@@ -46,13 +46,15 @@ trait ListFormkitTrait
         );
     }
 
-    public function getOtherInput(ListField $field): DOMElement
+    public function getOtherInput(ListField $field): HTMLElement
     {
         $newField = clone $field;
 
         return h('input', [
-            'class' => 'c-other-input form-control form-control-sm js-other-text',
+            'class' => 'c-other-input form-control js-other-text',
             'name' => $newField->setName($field->getName() . '_other')->getInputName(),
+            'style' => 'display: none',
+            'placeholder' => '輸入其它'
         ]);
     }
 }

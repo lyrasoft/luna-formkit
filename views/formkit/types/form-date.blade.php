@@ -17,6 +17,7 @@ namespace Lyrasoft\Formkit\view;
  */
 
 use Lyrasoft\Formkit\Entity\Formkit;
+use Lyrasoft\Formkit\Formkit\FormkitOptions;
 use Lyrasoft\Formkit\Formkit\FormkitService;
 use Lyrasoft\Formkit\Formkit\Type\AbstractFormType;
 use Windwalker\Core\Application\AppContext;
@@ -30,15 +31,14 @@ use Windwalker\Form\Field\AbstractField;
 use Windwalker\Form\Form;
 
 /**
-* @var $item           Formkit
-* @var $form           Form
-* @var $fields         Collection<AbstractFormType>
-* @var $options        array
-* @var $formkitService FormkitService
-* @var $field          AbstractFormType
-* @var $formField      AbstractField
+ * @var $item           Formkit
+ * @var $form           Form
+ * @var $fields         Collection<AbstractFormType>
+ * @var $options        FormkitOptions
+ * @var $formkitService FormkitService
+ * @var $field          AbstractFormType
+ * @var $formField      AbstractField
  */
 
 ?>
-
 <x-field :field="$formField"></x-field>

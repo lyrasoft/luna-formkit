@@ -97,7 +97,7 @@ class FormRadio extends FormSelect
      */
     public function toFormField(ServiceAwareInterface $app): AbstractField
     {
-        return (new RadioField($this->getLabel(), $this->getLabel()))
+        return new RadioField($this->getLabel(), $this->getLabel())
             ->register(
                 function (RadioField $field) {
                     foreach ($this->getOptions() as $opt) {

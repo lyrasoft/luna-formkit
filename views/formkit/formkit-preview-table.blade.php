@@ -38,7 +38,7 @@ use Windwalker\Core\Router\SystemUri;
 $formkitService = $app->retrieve(FormkitService::class);
 $userService = $app->retrieve(UserService::class);
 
-[, $fields] = $formkitService->getFormkitMeta($formkit);
+[, $fields] = $formkitService->prepareFormkitgetFormkitMeta($formkit);
 
 $user = $userService->load(['id' => $item->createdBy]);
 $content = $item->content;

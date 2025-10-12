@@ -100,7 +100,7 @@ class FormSelect extends AbstractFormType
      */
     public function toFormField(ServiceAwareInterface $app): AbstractField
     {
-        return (new ListField($this->getLabel(), $this->getLabel()))
+        return new ListField($this->getLabel(), $this->getLabel())
             ->register(
                 function (ListField $field) {
                     $field->option(
@@ -128,12 +128,14 @@ class FormSelect extends AbstractFormType
 
     public function prepareViewData(array $content): array
     {
+        $labels = $this->prepareViewLabels();
+
         $data = [];
-        $data[] = $content[$this->getLabel()] ?? '';
+        $data[$labels[0]] = $content[$this->getLabel()] ?? '';
 
         if ($this->getData()->enable_other) {
             $otherLabel = $this->getLabel() . '_other';
-            $data[] = $content[$otherLabel] ?? '';
+            $data[$labels[1]] = $content[$otherLabel] ?? '';
         }
 
         return $data;

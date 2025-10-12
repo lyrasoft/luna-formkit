@@ -17,6 +17,7 @@ namespace Lyrasoft\Formkit\View;
  */
 
 use Lyrasoft\Formkit\Entity\Formkit;
+use Lyrasoft\Formkit\Formkit\FormkitOptions;
 use Lyrasoft\Formkit\Formkit\FormkitService;
 use Lyrasoft\Formkit\Module\Front\Formkit\FormkitItemView;
 use Windwalker\Core\Application\AppContext;
@@ -42,7 +43,7 @@ $formkitService = $app->retrieve(FormkitService::class);
                 <h2>{{ $item->title }}</h2>
             </header>
 
-            {!! $formkitService->render($item, ['force' => true]) !!}
+            {!! $formkitService->render($item, new FormkitOptions(force: true)) !!}
         </div>
     </div>
 @stop

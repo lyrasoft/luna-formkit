@@ -91,7 +91,7 @@ class FormkitResponseListView implements ViewModelInterface, FilterAwareViewMode
             ->setDefaultItemClass(FormkitResponse::class);
 
         // Fields
-        [$formkit, $fields] = $this->formkitService->getFormkitMeta($formkitId);
+        [$formkit, $fields] = $this->formkitService->prepareFormkit($formkitId);
 
         $view[Formkit::class] = $formkit;
 

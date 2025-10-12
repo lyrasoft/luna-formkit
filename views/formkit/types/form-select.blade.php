@@ -44,6 +44,7 @@ if ($field->hasOther()) {
     $formField->option(
         '其他',
         '其他',
+        ['data-other-option' => true]
     );
 }
 ?>

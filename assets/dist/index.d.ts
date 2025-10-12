@@ -26,6 +26,7 @@ declare class FormkitHandler {
     constructor(el: HTMLElement, uid: string);
     registerValidation(): Promise<void>;
     autoCheckOther(): void;
+    toggleSelectOtherInput(): void;
 }
 
 declare interface FormkitModule {

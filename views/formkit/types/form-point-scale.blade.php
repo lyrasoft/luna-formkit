@@ -41,6 +41,7 @@ use Windwalker\Form\Form;
  */
 
 $data = $field->getData();
+$value = $formField->getValue();
 
 $input = $formField->getPreparedInput();
 $input->addClass('c-point-scale d-flex align-items-center gap-3');
@@ -68,6 +69,7 @@ $input->addClass('c-point-scale d-flex align-items-center gap-3');
                             data-radio-item-input
                             name="{{ $formField->getInputName() }}"
                             value="{{ $i }}"
+                            @attr('checked', (string) $value === (string) $i ? true : null)
                         />
                     </div>
                 </div>

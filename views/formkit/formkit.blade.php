@@ -17,6 +17,7 @@ namespace Lyrasoft\Formkit\view;
  */
 
 use Lyrasoft\Formkit\Entity\Formkit;
+use Lyrasoft\Formkit\Formkit\FormkitOptions;
 use Lyrasoft\Formkit\Formkit\FormkitService;
 use Lyrasoft\Formkit\Formkit\Type\AbstractFormType;
 use Unicorn\Script\UnicornScript;
@@ -36,20 +37,18 @@ use function Windwalker\uid;
  * @var $item           Formkit
  * @var $form           Form
  * @var $fields         Collection<AbstractFormType>
- * @var $options        array
+ * @var $options        FormkitOptions
  * @var $formkitService FormkitService
  */
 
-$asset->js('vendor/lyrasoft/formkit/dist/formkit.js');
-
 $uid = uid();
-$formId = $options['id'] ?? 'formkit-' . $uid;
+$formId = $options->id ?? 'formkit-' . $uid;
 
 $uniScript = $app->retrieve(UnicornScript::class);
 
 $options = collect($options);
 
-$return = $options['return'];
+$return = $options->return;
 
 $uniScript->addRoute(
     'formkit.action.' . $uid,
@@ -63,29 +62,25 @@ $uniScript->addRoute(
 $captcha = (bool) ($item->params['captcha'] ?? false);
 
 ?>
-<div id="{{ $formId }}-wrapper" class="l-formkit-wrapper mb-5 mt-5" data-role="formkit"
+<div id="{{ $formId }}-wrapper" class="l-formkit-wrapper" data-role="formkit"
     uni-formkit="{{ $uid }}">
     <form id="{{ $formId }}" method="post" enctype="multipart/form-data"
         uni-form-validate='{"scroll": true}'>
-        <div class="l-formkit-content mb-5">
-            @if (trim($item->description))
+
+        @if (trim($item->description))
+            <div class="l-formkit-content mb-5">
                 <div class="l-formkit-content__desc">
                     {!! $item->description !!}
                 </div>
-            @endif
-        </div>
-
-        @foreach ($fields as $field)
-            @php
-                $formField = $form[$field->getLabel()];
-                if (!$formField) {
-                    throw new \OutOfBoundsException('FormField of ' . $field->getLabel() . ' not found.');
-                }
-            @endphp
-            <div class="c-formkit-field-wrapper mb-4" data-uid="{{ $formField->get('uid') }}">
-                @include($formkitService->getFieldLayout($field))
             </div>
-        @endforeach
+        @endif
+
+        <div class="l-formkit-form d-flex flex-column gap-4">
+            @include(
+                'formkit.formkit-fields',
+                compact('item', 'form', 'fields', 'options', 'formkitService')
+            )
+        </div>
 
         @if ($captcha)
             <div class="l-captcha-wrapper mx-auto mt-5" style="max-width: 500px">

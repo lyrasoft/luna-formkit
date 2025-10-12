@@ -16,6 +16,7 @@ namespace App\view;
  * @var $lang      LangService     The language translation service.
  */
 
+use Cron\AbstractField;
 use Lyrasoft\Formkit\Entity\Formkit;
 use Lyrasoft\Formkit\Formkit\FormkitOptions;
 use Lyrasoft\Formkit\Formkit\FormkitService;
@@ -30,11 +31,14 @@ use Windwalker\Data\Collection;
 use Windwalker\Form\Form;
 
 /**
-* @var $item           Formkit
-* @var $form           Form
-* @var $fields         Collection<AbstractFormType>
-* @var $options        FormkitOptions
-* @var $formkitService FormkitService
+ * @var $formField           AbstractField
+ * @var $field               AbstractFormType
+ * @var $options             FormkitOptions
+ * @var $formkitService      FormkitService
  */
 
 ?>
+
+<div class="c-formkit-field-wrapper" data-uid="{{ $formField->get('uid') }}">
+    @include($formkitService->getFieldLayout($field))
+</div>

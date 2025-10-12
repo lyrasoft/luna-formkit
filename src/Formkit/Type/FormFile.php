@@ -111,7 +111,7 @@ class FormFile extends AbstractFormType
             }
         } else {
             /** @var UploadedFileInterface $files */
-            $data[$this->getLabel()][] = $this->upload($formkit, $files);
+            $data[$this->getLabel()] = $this->upload($formkit, $files);
         }
 
         return $data;
@@ -142,11 +142,13 @@ class FormFile extends AbstractFormType
 
     public function prepareViewData(array $content): array
     {
-        $text = collect((array) ($content[$this->getLabel()] ?? []));
+        $files = collect((array) ($content[$this->getLabel()] ?? []));
 
-        $text = $text->filter()->mapWithKeys(
+        $files = $files->filter()->mapWithKeys(
             function ($item, $i) {
-                yield $i => h(
+                $label = $this->getLabel() . '_' . ($i + 1);
+
+                yield $label => h(
                     'div',
                     [],
                     h('a', ['href' => $item, 'target' => '_blank'], '觀看檔案 ' . $i)
@@ -154,7 +156,13 @@ class FormFile extends AbstractFormType
             }
         );
 
-        return [(string) $text->implode("\n")];
+        if ($this->data->max > 1) {
+            return $files->dump();
+        }
+
+        return [
+            $this->getLabel() => $files->first()
+        ];
     }
 
     public function prepareExportLabels(): array

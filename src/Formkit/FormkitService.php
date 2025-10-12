@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lyrasoft\Formkit\Formkit;
 
+use Lyrasoft\Formkit\Data\FieldRecord;
 use Lyrasoft\Formkit\Entity\Formkit;
 use Lyrasoft\Formkit\Entity\FormkitResponse;
 use Lyrasoft\Formkit\Formkit\Exception\FormkitUnpublishedException;
@@ -57,7 +58,7 @@ class FormkitService
         return $this->getFormTypes()[$typeId] ?? null;
     }
 
-    public function getFormInstance(string $type, mixed $data): AbstractFormType
+    public function getFormInstance(string $type, FieldRecord $data): AbstractFormType
     {
         $className = $this->getFormTypeById($type);
 
@@ -72,24 +73,29 @@ class FormkitService
         return $field;
     }
 
+    public function fieldExists(string $type): bool
+    {
+        return (bool) $this->getFormTypeById($type);
+    }
+
     public function getFieldLayout(AbstractFormType $field): string
     {
         return 'formkit.types.form-' . $field::getId();
     }
 
-    public function render(int|Formkit $item, array $options = []): string
+    public function render(int|Formkit $item, FormkitOptions $options = new FormkitOptions()): string
     {
         /**
-         * @var Formkit $item
+         * @var Formkit    $item
          * @var Collection $fields
-         * @var Form $form
+         * @var Form       $form
          */
-        [$item, $fields, $form] = $this->getFormkitMeta($item, $options);
+        [$item, $fields, $form] = $this->prepareFormkit($item, $options);
 
         $id = $item->id;
 
         $formkitService = $this;
-        $force = $options['force'] ?? false;
+        $force = $options->force;
 
         if (!$force && !$this->isAvailable($item)) {
             return $this->rendererService->render(
@@ -118,29 +124,76 @@ class FormkitService
         );
     }
 
+    public function renderFields(int|Formkit $item, FormkitOptions $options = new FormkitOptions()): string
+    {
+        /**
+         * @var Formkit    $item
+         * @var Collection $fields
+         * @var Form       $form
+         */
+        [$item, $fields, $form] = $this->prepareFormkit($item, $options);
+
+        $id = $item->id;
+
+        $formkitService = $this;
+
+        return $this->rendererService->render(
+            'formkit.formkit-fields',
+            compact(
+                'id',
+                'options',
+                'fields',
+                'item',
+                'formkitService',
+                'form'
+            ),
+        );
+    }
+
+    public function renderSingleField(
+        AbstractFormType $field,
+        AbstractField $formField,
+        FormkitOptions $options = new FormkitOptions()
+    ): string {
+        $formkitService = $this;
+
+        return $this->rendererService->render(
+            'formkit.formkit-field',
+            compact(
+                'options',
+                'field',
+                'formField',
+                'formkitService',
+            ),
+        );
+    }
+
     /**
-     * @param  int|Formkit  $item
-     * @param  array        $options
+     * @param  int|Formkit     $item
+     * @param  FormkitOptions  $options
      *
      * @return  array{ 0: Formkit, 1: Collection<AbstractFormType>, 2: Form }
-     *
+     * @throws \ReflectionException
      */
-    public function getFormkitMeta(int|Formkit $item, array $options = []): array
+    public function prepareFormkit(int|Formkit $item, FormkitOptions $options = new FormkitOptions()): array
     {
         if (!$item instanceof Formkit) {
             $item = $this->orm->mustFindOne(Formkit::class, $item);
         }
 
-        $fields = collect($item->content);
+        /** @var Collection<FieldRecord> $fields */
+        $fields = collect($item->content)->map(fn($field) => FieldRecord::wrap($field));
         $formFactory = $this->app->retrieve(FormFactory::class);
         $form = $formFactory->create();
-        $form->setNamespace($options['control'] ?? 'formkit');
+        $form->setNamespace($options->namespace);
 
-        $fields = $fields->map(
-            function (array $field) use ($form) {
-                $data = collect($field);
+        $fields = $fields->mapWithKeys(
+            function (FieldRecord $data, $k) use ($form) {
+                if (!$this->fieldExists($data->type)) {
+                    return;
+                }
 
-                $fieldInstance = $this->getFormInstance($data['type'], $data);
+                $fieldInstance = $this->getFormInstance($data->type, $data);
 
                 $form->addField(
                     $fieldInstance->toFormField($this->app)
@@ -152,7 +205,7 @@ class FormkitService
                     ->setAttribute('id', 'input-' . $data->uid)
                     ->set('uid', $data->uid);
 
-                return $fieldInstance;
+                yield $k => $fieldInstance;
             }
         );
 
@@ -164,24 +217,32 @@ class FormkitService
                 ->jsVerify(true);
         }
 
+        if ($options->data !== []) {
+            $form->fill($options->data);
+        }
+
+        if ($options->afterPrepared) {
+            ($options->afterPrepared)($item, $form, $fields);
+        }
+
         return [$item, $fields, $form];
     }
 
-    public function getForm(int|Formkit $id, array $options = []): Form
+    public function getForm(int|Formkit $id, FormkitOptions $options = new FormkitOptions()): Form
     {
-        return $this->getFormkitMeta($id, $options)[2];
+        return $this->prepareFormkit($id, $options)[2];
     }
 
     /**
-     * @param  int|Formkit  $id
-     * @param  array        $options
+     * @param  int|Formkit     $id
+     * @param  FormkitOptions  $options
      *
      * @return  Collection<AbstractField>
-     *
+     * @throws \ReflectionException
      */
-    public function getFields(int|Formkit $id, array $options = []): Collection
+    public function getFields(int|Formkit $id, FormkitOptions $options = new FormkitOptions()): Collection
     {
-        return $this->getFormkitMeta($id, $options)[1];
+        return $this->prepareFormkit($id, $options)[1];
     }
 
     public function checkAvailable(Formkit $item): void
@@ -242,7 +303,13 @@ class FormkitService
                     return '';
                 }
 
-                return $this->render($item, $params);
+                unset($params['alias'], $params['id']);
+
+                $options = new FormkitOptions()->with(...$params);
+                $options->id = $params['html_id'] ?? null;
+                $options->namespace = $params['namespace'] ?? $params['ns'] ?? $options->namespace;
+
+                return $this->render($item, $options);
             }
         );
 
@@ -273,8 +340,12 @@ class FormkitService
         );
     }
 
-    public function createReceiverMailMessage(Formkit $item, FormkitResponse $res, ?string $subject = null, ?string $layout = null): MailMessage
-    {
+    public function createReceiverMailMessage(
+        Formkit $item,
+        FormkitResponse $res,
+        ?string $subject = null,
+        ?string $layout = null
+    ): MailMessage {
         $subject ??= sprintf(
             '[表單提交 #%s] %s - %s',
             $res->id,

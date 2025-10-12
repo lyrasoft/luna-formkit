@@ -1,5 +1,14 @@
 
-import { __, html, module, route, selectAll, useFormValidation, useUniDirective } from '@windwalker-io/unicorn-next';
+import {
+  __, hasRoute,
+  html,
+  module,
+  route,
+  selectAll,
+  uid,
+  useFormValidation,
+  useUniDirective
+} from '@windwalker-io/unicorn-next';
 
 useFormValidation();
 
@@ -7,22 +16,31 @@ export class FormkitHandler {
   constructor(protected el: HTMLElement, protected uid: string) {
     this.registerValidation();
     this.autoCheckOther();
+    this.toggleSelectOtherInput();
   }
 
   async registerValidation() {
-    const form = this.el.querySelector('form')!;
+    const form = this.el.querySelector('form') || this.el.closest('form');
 
-    const action = route('formkit.action.' + this.uid);
-    const button = this.el.querySelector<HTMLButtonElement>('[data-task=submit]')!;
+    if (!form) {
+      return;
+    }
 
-    button.addEventListener('click', () => {
-      form.action = action;
-      form.requestSubmit();
+    const routeKey = 'formkit.action.' + this.uid;
 
-      setTimeout(() => {
-        form.removeAttribute('action');
-      }, 500);
-    });
+    if (hasRoute(routeKey)) {
+      const action = route(routeKey);
+      const button = this.el.querySelector<HTMLButtonElement>('[data-task=submit]')!;
+
+      button?.addEventListener('click', () => {
+        form.action = action;
+        form.requestSubmit();
+
+        setTimeout(() => {
+          form.removeAttribute('action');
+        }, 500);
+      });
+    }
 
     form.addEventListener('submit', (e) => {
       let invalid = 0;
@@ -105,13 +123,39 @@ export class FormkitHandler {
       });
     });
   }
+
+  toggleSelectOtherInput() {
+    const selectInputs = selectAll<HTMLSelectElement>('select[data-field-input]');
+
+    for (const selectInput of selectInputs) {
+      selectInput.addEventListener('change', () => toggle(selectInput));
+
+      toggle(selectInput);
+    }
+
+    function toggle(selectInput: HTMLSelectElement) {
+      const option = selectInput.querySelector<HTMLOptionElement>('option[data-other-option]');
+      const otherInput = selectInput.closest('.l-form-select-wrapper')
+        ?.querySelector<HTMLInputElement>('.js-other-text');
+
+      if (option && otherInput) {
+        if (option.selected) {
+          otherInput.style.display = 'block';
+        } else {
+          otherInput.style.display = 'none';
+        }
+      }
+    }
+  }
 }
 
 export const ready = useUniDirective<HTMLElement>(
   'formkit',
   {
     mounted(el, { value }) {
-      module(el, 'formkit', (el) => new FormkitHandler(el, value))
+      const uniId = value || uid();
+
+      module(el, 'formkit', (el) => new FormkitHandler(el, uniId))
     }
   }
 );
