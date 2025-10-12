@@ -38,6 +38,17 @@ Or run this command to copy languages files:
 php windwalker pkg:install lyrasoft/formkit -t lang
 ```
 
+### JS
+
+You must add `useFormkit()` to any page which uses formkit to enable it, 
+or just enable formkit at front `main.ts` once:
+
+```ts
+import { useFormkit } from '~vendor/lyrasoft/formkit/dist';
+
+useFormkit();
+```
+
 ## Register Admin Menu
 
 Edit `resources/menu/admin/sidemenu.menu.php`
