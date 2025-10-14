@@ -107,8 +107,10 @@ class FormDate extends AbstractFormType
 
     public function prepareViewData(array $content): array
     {
+        $value = $content[$this->getLabel()] ?? '';
+
         return [
-            $this->getLabel() => Chronos::toFormat($content[$this->getLabel()], 'Y/m/d')
+            $this->getLabel() => $value ? Chronos::toFormat($value, 'Y/m/d') : ''
         ];
     }
 
