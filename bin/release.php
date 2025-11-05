@@ -117,6 +117,7 @@ HELP;
 }
 
 exit((new Release())
+    ->addScript('yarn --cwd ./assets install')
     ->addScript('yarn --cwd ./assets build:prod')
     ->addScript('git add .')
     ->execute());

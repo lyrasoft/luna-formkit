@@ -6,7 +6,11 @@ namespace Lyrasoft\Formkit\Formkit\Type;
 
 use Windwalker\Core\Application\ServiceAwareInterface;
 use Windwalker\Form\Field\AbstractField;
+use Windwalker\Form\Field\EmailField;
+use Windwalker\Form\Field\NumberField;
+use Windwalker\Form\Field\TelField;
 use Windwalker\Form\Field\TextField;
+use Windwalker\Form\Field\UrlField;
 use Windwalker\Utilities\Contract\LanguageInterface;
 
 /**
@@ -90,6 +94,16 @@ class FormText extends AbstractFormType
 
     public function toFormField(ServiceAwareInterface $app): AbstractField
     {
-        return parent::toFormField($app)->attr('type', $this->data->subtype);
+        $field = match ($this->data->subtype) {
+            'email' => $app->make(EmailField::class),
+            'number' => $app->make(NumberField::class),
+            'url' => $app->make(UrlField::class),
+            'tel' => $app->make(TelField::class),
+            default => $app->make(TextField::class),
+        };
+
+        return $field->label($this->getLabel())
+            ->setName($this->getLabel())
+            ->placeholder((string) $this->data->placeholder);
     }
 }
