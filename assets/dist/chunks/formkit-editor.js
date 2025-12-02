@@ -83,7 +83,7 @@ function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_draggable = resolveComponent("draggable");
   return openBlock(), createElementBlock("div", _hoisted_1$6, [
     createElementVNode("div", _hoisted_2$6, [
-      _cache[9] || (_cache[9] = createElementVNode("h5", { class: "" }, "\n        列\n      ", -1)),
+      _cache[9] || (_cache[9] = createElementVNode("h5", { class: "" }, "\r\n        列\r\n      ", -1)),
       _cache[10] || (_cache[10] = createTextVNode()),
       createElementVNode("div", _hoisted_3$3, [
         createVNode(_component_draggable, {
@@ -145,13 +145,13 @@ function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
           onClick: _cache[1] || (_cache[1] = ($event) => $setup.addRow())
         }, [..._cache[8] || (_cache[8] = [
           createElementVNode("span", { class: "far fa-plus" }, null, -1),
-          createTextVNode("\n          新增列\n        ", -1)
+          createTextVNode("\r\n          新增列\r\n        ", -1)
         ])])
       ])
     ]),
     _cache[21] || (_cache[21] = createTextVNode()),
     createElementVNode("div", _hoisted_8$2, [
-      _cache[18] || (_cache[18] = createElementVNode("h5", { class: "" }, "\n        欄\n      ", -1)),
+      _cache[18] || (_cache[18] = createElementVNode("h5", { class: "" }, "\r\n        欄\r\n      ", -1)),
       _cache[19] || (_cache[19] = createTextVNode()),
       createElementVNode("div", _hoisted_9$1, [
         createVNode(_component_draggable, {
@@ -219,7 +219,7 @@ function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
           onClick: _cache[3] || (_cache[3] = ($event) => $setup.addColumn())
         }, [..._cache[17] || (_cache[17] = [
           createElementVNode("span", { class: "far fa-plus" }, null, -1),
-          createTextVNode("\n          新增欄\n        ", -1)
+          createTextVNode("\r\n          新增欄\r\n        ", -1)
         ])])
       ])
     ])
@@ -372,7 +372,7 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
         onClick: _cache[2] || (_cache[2] = ($event) => $setup.item.enable_other = "1")
       }, [..._cache[17] || (_cache[17] = [
         createElementVNode("span", { class: "far fa-plus" }, null, -1),
-        createTextVNode("\n        新增其他\n      ", -1)
+        createTextVNode("\r\n        新增其他\r\n      ", -1)
       ])])) : createCommentVNode("", true)
     ]),
     _cache[21] || (_cache[21] = createTextVNode()),
@@ -383,7 +383,7 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
         onClick: _cache[3] || (_cache[3] = ($event) => $setup.addOption())
       }, [..._cache[20] || (_cache[20] = [
         createElementVNode("span", { class: "far fa-plus" }, null, -1),
-        createTextVNode("\n        新增選項\n      ", -1)
+        createTextVNode("\r\n        新增選項\r\n      ", -1)
       ])])
     ])
   ]);
@@ -5754,7 +5754,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
             onClick: _cache[5] || (_cache[5] = withModifiers(($event) => _ctx.$emit("add"), ["stop"]))
           }, [..._cache[17] || (_cache[17] = [
             createElementVNode("span", { class: "far fa-plus" }, null, -1),
-            createTextVNode("\n            新增\n          ", -1)
+            createTextVNode("\r\n            新增\r\n          ", -1)
           ])])
         ]),
         _cache[23] || (_cache[23] = createTextVNode()),
@@ -5772,7 +5772,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
             switch: ""
           }, {
             default: withCtx(() => [..._cache[18] || (_cache[18] = [
-              createTextVNode("\n            列表預覽\n          ", -1)
+              createTextVNode("\r\n            列表預覽\r\n          ", -1)
             ])]),
             _: 1
           }, 8, ["modelValue"])), [
@@ -5788,7 +5788,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
             switch: ""
           }, {
             default: withCtx(() => [..._cache[19] || (_cache[19] = [
-              createTextVNode("\n            必填\n          ", -1)
+              createTextVNode("\r\n            必填\r\n          ", -1)
             ])]),
             _: 1
           }, 8, ["modelValue"])
@@ -5801,7 +5801,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
             onClick: _cache[9] || (_cache[9] = withModifiers(($event) => $setup.copy($setup.item), ["stop"]))
           }, [..._cache[20] || (_cache[20] = [
             createElementVNode("span", { class: "far fa-copy" }, null, -1),
-            createTextVNode("\n            複製\n          ", -1)
+            createTextVNode("\r\n            複製\r\n          ", -1)
           ])]),
           _cache[22] || (_cache[22] = createTextVNode()),
           createElementVNode("button", {
@@ -5810,7 +5810,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
             onClick: _cache[10] || (_cache[10] = ($event) => $setup.remove($setup.item))
           }, [..._cache[21] || (_cache[21] = [
             createElementVNode("span", { class: "far fa-trash" }, null, -1),
-            createTextVNode("\n            刪除\n          ", -1)
+            createTextVNode("\r\n            刪除\r\n          ", -1)
           ])])
         ])
       ])
@@ -5921,7 +5921,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         onClick: _cache[1] || (_cache[1] = ($event) => $setup.addField())
       }, [..._cache[2] || (_cache[2] = [
         createElementVNode("span", { class: "fa fa-plus" }, null, -1),
-        createTextVNode("\n        增加欄位\n      ", -1)
+        createTextVNode("\r\n        增加欄位\r\n      ", -1)
       ])])
     ]),
     _cache[4] || (_cache[4] = createTextVNode()),
