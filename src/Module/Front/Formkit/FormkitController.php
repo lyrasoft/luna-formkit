@@ -21,6 +21,7 @@ use Lyrasoft\Luna\User\UserService;
 use Windwalker\Core\Application\AppContext;
 use Windwalker\Core\Attributes\Controller;
 use Windwalker\Core\Http\Browser;
+use Windwalker\Core\Http\BrowserNext;
 use Windwalker\Core\Http\RequestAssert;
 use Windwalker\Core\Utilities\Base64Url;
 use Windwalker\DI\Attributes\Autowire;
@@ -38,7 +39,7 @@ class FormkitController
         AppContext $app,
         ORM $orm,
         FormkitService $formkitService,
-        Browser $browser,
+        BrowserNext $browser,
         UserService $userService
     ) {
         $id = (int) $app->input('id');
@@ -74,10 +75,10 @@ class FormkitController
         $res->from = $app->getNav()->localReferrer();
         $res->content = $content;
         $res->ip = $appRequest->getClientIP();
-        $res->ua = $browser->getUserAgent();
-        $res->device = $browser->deviceType() . '/' . ($browser->device() ?: 'PC');
-        $res->browser = $browser->browser() . '/' . $browser->version($browser->browser());
-        $res->os = $browser->platform();
+        $res->ua = $browser->userAgent;
+        $res->device = $browser->device->type . '/' . ($browser->deviceString() ?: 'PC');
+        $res->browser = $browser->browserString() . '/' . $browser->engine->toString();
+        $res->os = $browser->osString();
         $res->createdBy = (int) $user->id;
 
         $orm->createOne($res);
