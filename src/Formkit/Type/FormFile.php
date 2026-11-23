@@ -85,7 +85,7 @@ class FormFile extends AbstractFormType
             $field->attr('data-accepted', $accept);
         }
 
-        $size = (int) ($this->data->max_size ?: 10);
+        $size = $this->getMaxSize();
 
         if ($size) {
             $field->maxSize($size);
@@ -98,20 +98,38 @@ class FormFile extends AbstractFormType
         return $field;
     }
 
+    protected function getMaxFiles(): int
+    {
+        return max(1, (int) $this->data->max);
+    }
+
+    protected function getMaxSize(): int
+    {
+        return (int) ($this->data->max_size ?: 10);
+    }
+
     public function prepareStore(AppRequest $request, Formkit $formkit, array $data, string $ns): array
     {
-        $files = $request->file($ns)[$this->getLabel()];
+        $files = $request->file($ns)[$this->getLabel()] ?? [];
+        $files = array_values(array_filter(is_array($files) ? $files : [$files]));
 
-        $data[$this->getLabel()] = [];
+        if (count($files) > $this->getMaxFiles()) {
+            throw new ValidateFailException(
+                sprintf('%s 最多只能上傳 %d 個檔案', $this->getLabel(), $this->getMaxFiles())
+            );
+        }
+
+        $uris = [];
+
+        /** @var UploadedFileInterface $file */
+        foreach ($files as $file) {
+            $uris[] = $this->upload($formkit, $file);
+        }
 
         if ($this->data->max > 1) {
-            /** @var UploadedFileInterface $file */
-            foreach ($files as $i => $file) {
-                $data[$this->getLabel()][] = $this->upload($formkit, $file);
-            }
+            $data[$this->getLabel()] = $uris;
         } else {
-            /** @var UploadedFileInterface $files */
-            $data[$this->getLabel()] = $this->upload($formkit, $files);
+            $data[$this->getLabel()] = $uris[0] ?? '';
         }
 
         return $data;
@@ -119,9 +137,21 @@ class FormFile extends AbstractFormType
 
     protected function upload(Formkit $formkit, UploadedFileInterface $file): string
     {
-        $filename = $file->getClientFilename();
+        if ($file->getSize() > $this->getMaxSize() * 1024 * 1024) {
+            throw new ValidateFailException(
+                sprintf('%s 檔案大小不可超過 %d MB', $this->getLabel(), $this->getMaxSize())
+            );
+        }
 
-        $contentDisposition = str_starts_with($file->getClientMediaType(), 'image')
+        $filename = $file->getClientFilename();
+        $mediaType = $this->detectMediaType($file);
+
+        $this->assertAccepted($file, $mediaType);
+
+        // Only non-SVG images are rendered inline; everything else is forced to download
+        $inline = str_starts_with($mediaType, 'image/') && $mediaType !== 'image/svg+xml';
+
+        $contentDisposition = $inline
             ? null
             : HeaderHelper::attachmentContentDisposition($filename);
 
@@ -130,7 +160,7 @@ class FormFile extends AbstractFormType
             'formkit/' . $formkit->id . '/' . tid('file') . '.{ext}',
             [
                 'options' => [
-                    'ContentType' => $file->getClientMediaType(),
+                    'ContentType' => $mediaType,
                     'ContentDisposition' => $contentDisposition,
                     'ACL' => S3Service::ACL_PUBLIC_READ
                 ]
@@ -138,6 +168,53 @@ class FormFile extends AbstractFormType
         );
 
         return (string) $result?->getUri();
+    }
+
+    protected function detectMediaType(UploadedFileInterface $file): string
+    {
+        $stream = $file->getStream();
+        $stream->rewind();
+
+        $mediaType = (new \finfo(FILEINFO_MIME_TYPE))->buffer((string) $stream->read(8192));
+
+        $stream->rewind();
+
+        return $mediaType ?: 'application/octet-stream';
+    }
+
+    protected function assertAccepted(UploadedFileInterface $file, string $mediaType): void
+    {
+        $accept = strtolower(trim((string) $this->data->accept));
+
+        if ($accept === '') {
+            return;
+        }
+
+        $extension = '.' . strtolower(pathinfo((string) $file->getClientFilename(), PATHINFO_EXTENSION));
+
+        foreach (array_map('trim', explode(',', $accept)) as $rule) {
+            if (str_starts_with($rule, '.')) {
+                if ($rule === $extension) {
+                    return;
+                }
+
+                continue;
+            }
+
+            if (str_ends_with($rule, '/*')) {
+                if (str_starts_with($mediaType, substr($rule, 0, -1))) {
+                    return;
+                }
+
+                continue;
+            }
+
+            if ($rule === $mediaType) {
+                return;
+            }
+        }
+
+        throw new ValidateFailException(sprintf('%s 不接受此檔案格式', $this->getLabel()));
     }
 
     public function prepareViewData(array $content): array
