@@ -16,6 +16,7 @@ use Lyrasoft\Luna\Access\AccessService;
 use Lyrasoft\Luna\Entity\User;
 use Lyrasoft\Luna\Entity\UserRoleMap;
 use Lyrasoft\Luna\Field\CaptchaField;
+use Lyrasoft\Luna\PageBuilder\PageService;
 use Lyrasoft\Luna\Repository\UserRepository;
 use Lyrasoft\Luna\User\UserService;
 use Windwalker\Core\Application\AppContext;
@@ -23,6 +24,7 @@ use Windwalker\Core\Attributes\Controller;
 use Windwalker\Core\Http\Browser;
 use Windwalker\Core\Http\BrowserNext;
 use Windwalker\Core\Http\RequestAssert;
+use Windwalker\Core\Router\Exception\RouteNotFoundException;
 use Windwalker\Core\Utilities\Base64Url;
 use Windwalker\DI\Attributes\Autowire;
 use Windwalker\ORM\ORM;
@@ -40,18 +42,28 @@ class FormkitController
         ORM $orm,
         FormkitService $formkitService,
         BrowserNext $browser,
-        UserService $userService
+        UserService $userService,
+        PageService $pageService
     ) {
         $id = (int) $app->input('id');
         $ns = $app->input('ns');
         $return = $app->input('return');
         $content = $app->input($ns);
+        $s = (string) $app->input('s');
 
         $user = $userService->getUser();
 
         RequestAssert::assert($id, 'No ID');
 
         [$formkit, $fields, $form] = $formkitService->prepareFormkit($id);
+
+        if (!$pageService->secretVerify($formkit->id, $s)) {
+            $formkitService->checkAvailable($formkit);
+
+            if (!$formkit->public) {
+                throw new RouteNotFoundException('Not public');
+            }
+        }
 
         $captcha = (bool) ($formkit->params['captcha'] ?? false);
 
