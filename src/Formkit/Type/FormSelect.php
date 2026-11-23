@@ -131,11 +131,11 @@ class FormSelect extends AbstractFormType
         $labels = $this->prepareViewLabels();
 
         $data = [];
-        $data[$labels[0]] = $content[$this->getLabel()] ?? '';
+        $data[$labels[0]] = $this->escapeViewValue($content[$this->getLabel()] ?? '');
 
         if ($this->getData()->enable_other) {
             $otherLabel = $this->getLabel() . '_other';
-            $data[$labels[1]] = $content[$otherLabel] ?? '';
+            $data[$labels[1]] = $this->escapeViewValue($content[$otherLabel] ?? '');
         }
 
         return $data;

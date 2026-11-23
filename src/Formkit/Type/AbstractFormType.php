@@ -61,9 +61,18 @@ abstract class AbstractFormType
 
     public function prepareViewData(array $content): array
     {
-        $data[$this->getLabel()] = $content[$this->getLabel()] ?? '';
+        $data[$this->getLabel()] = $this->escapeViewValue($content[$this->getLabel()] ?? '');
 
         return $data;
+    }
+
+    protected function escapeViewValue(mixed $value): string
+    {
+        if (is_array($value)) {
+            return implode(', ', array_map($this->escapeViewValue(...), $value));
+        }
+
+        return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 
     public function prepareExportLabels(): array

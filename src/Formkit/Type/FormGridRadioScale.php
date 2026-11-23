@@ -104,7 +104,7 @@ class FormGridRadioScale extends AbstractFormType
         $data = [];
 
         foreach ($this->getRows() as $i => $row) {
-            $data[] = $content[$this->getLabel()][$row['text']] ?? '';
+            $data[] = $this->escapeViewValue($content[$this->getLabel()][$row['text']] ?? '');
         }
 
         return $data;
