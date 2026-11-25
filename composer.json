@@ -20,7 +20,7 @@
         "lyrasoft/luna": "^2.2",
         "phpoffice/phpspreadsheet": "^5.0",
         "thunderer/shortcode": "^0.7.5",
-        "gregwar/captcha": "^1.2"
+        "gregwar/captcha": "^1.2||^2.0"
     },
     "extra": {
         "windwalker":{
