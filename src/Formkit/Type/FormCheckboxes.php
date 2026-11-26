@@ -135,7 +135,7 @@ class FormCheckboxes extends FormSelect
         $options[] = '<ul>';
 
         foreach ($selected as $item) {
-            $options[] = "<li>{$item}</li>";
+            $options[] = '<li>' . $this->escapeViewValue($item) . '</li>';
         }
 
         $options[] = '</ul>';
@@ -143,7 +143,7 @@ class FormCheckboxes extends FormSelect
         $otherLabel = $this->getLabel() . '_other';
 
         $data[$labels[0]] = (string) $options->implode('');
-        $data[$labels[1]] = $content[$otherLabel] ?? '';
+        $data[$labels[1]] = $this->escapeViewValue($content[$otherLabel] ?? '');
 
         return $data;
     }

@@ -90,7 +90,7 @@ class FormGridBoxScale extends FormGridRadioScale
             $selected = $content[$this->getLabel()][$row['text']] ?? [];
 
             $selected = array_map(
-                fn ($item) => "<li>$item</li>",
+                fn ($item) => '<li>' . $this->escapeViewValue($item) . '</li>',
                 $selected
             );
 
